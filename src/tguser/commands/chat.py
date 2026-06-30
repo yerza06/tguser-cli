@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import typer
+from pyrogram.errors import RPCError
 
 from ..client import run_async
 from ..config import get_settings
 from ..console import chat_table, console, fail, info, success
 from ..db.database import init_db
+from ..discover import resolve_online
 from ..db.repository import (
     ChatExistsError,
     ChatNotFoundError,
@@ -31,6 +33,21 @@ async def _sessionmaker():
     return await init_db(settings.db_path)
 
 
+def _needs_resolution(value: str) -> bool:
+    """``True`` для ``@username``/ссылок — то, что стоит резолвить в числовой ID.
+
+    Числовые ID и ``me`` сохраняем как есть.
+    """
+    raw = value.strip()
+    if raw == "me":
+        return False
+    try:
+        int(raw)
+    except ValueError:
+        return True
+    return False
+
+
 @app.callback(invoke_without_command=True)
 def main(ctx: typer.Context) -> None:
     """Без подкоманды — показать список сохранённых чатов."""
@@ -41,19 +58,47 @@ def main(ctx: typer.Context) -> None:
 @app.command("add", context_settings=ALLOW_NEG)
 def add(
     name: str = typer.Argument(..., help="Имя (alias) чата"),
-    chat_id: str = typer.Argument(..., help="ID чата / @username"),
+    chat_id: str = typer.Argument(..., help="ID чата / @username / ссылка"),
+    no_resolve: bool = typer.Option(
+        False, "--no-resolve", help="Сохранить значение как есть, без онлайн-резолва"
+    ),
 ) -> None:
-    """Добавить новый alias чата."""
+    """Добавить новый alias чата.
+
+    Если указан ``@username`` или ссылка и есть активная сессия — ID и название
+    подтягиваются автоматически. ``--no-resolve`` сохраняет значение как есть.
+    """
+    settings = get_settings()
+    stored_id = chat_id
+    title: str | None = None
+
+    if not no_resolve and _needs_resolution(chat_id):
+        if settings.has_credentials and settings.session_file.exists():
+            try:
+                resolved_id, title, _ = run_async(resolve_online(settings, chat_id))
+                stored_id = str(resolved_id)
+            except RPCError as exc:
+                info(
+                    f"[yellow]Не удалось определить ID ({exc}). "
+                    f"Сохраняю «{chat_id}» как есть.[/yellow]"
+                )
+                title = None
+        else:
+            info(
+                "[yellow]Нет активной сессии — сохраняю значение как есть "
+                "(войдите через [bold]tguser login[/bold] для авторезолва).[/yellow]"
+            )
 
     async def _run():
         sm = await _sessionmaker()
-        return await add_chat(sm, name, chat_id)
+        return await add_chat(sm, name, stored_id, title)
 
     try:
         chat = run_async(_run())
     except ChatExistsError:
         raise fail(f"Чат с именем [bold]{name}[/bold] уже существует.")
-    success(f"Добавлен чат [bold]{chat.name}[/bold] → {chat.chat_id}")
+    suffix = f" ([dim]{chat.title}[/dim])" if chat.title else ""
+    success(f"Добавлен чат [bold]{chat.name}[/bold] → {chat.chat_id}{suffix}")
 
 
 def _list() -> None:

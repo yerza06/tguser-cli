@@ -15,6 +15,7 @@ The target is the recipient. It is specified via the `--to` flag or positionally
 | Saved Messages (yourself) | `--to me` |
 
 Aliases are configured with the `chat` command — see [04. Chat Management](04-chat-management.md).
+Don't know the numeric ID? See [08. Chat Discovery](08-discovery.md).
 
 ## Two Syntaxes
 

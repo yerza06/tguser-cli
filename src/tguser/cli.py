@@ -5,7 +5,7 @@ from __future__ import annotations
 import typer
 
 from . import __version__
-from .commands import auth, chat, send
+from .commands import auth, chat, discovery, send
 
 app = typer.Typer(
     name="tguser",
@@ -19,6 +19,9 @@ app.registered_commands.extend(auth.app.registered_commands)
 
 # Под-приложение для управления чатами (tguser chat …).
 app.add_typer(chat.app, name="chat")
+
+# Команды обнаружения чатов (tguser dialogs / resolve).
+app.registered_commands.extend(discovery.app.registered_commands)
 
 # Команды отправки — на верхнем уровне (tguser send / sendphoto / …).
 app.registered_commands.extend(send.app.registered_commands)

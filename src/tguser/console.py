@@ -39,3 +39,15 @@ def chat_table(rows: list[tuple[str, str, str, str]]) -> Table:
     for name, chat_id, title, created in rows:
         table.add_row(name, chat_id, title, created)
     return table
+
+
+def dialogs_table(rows: list[dict]) -> Table:
+    """Собрать таблицу диалогов из словарей (id, title, type, username)."""
+    table = Table(title="Диалоги", header_style="bold cyan")
+    table.add_column("ID чата", style="bold")
+    table.add_column("Название")
+    table.add_column("Тип", style="dim")
+    table.add_column("@username")
+    for row in rows:
+        table.add_row(str(row["id"]), row["title"], row["type"], row["username"])
+    return table

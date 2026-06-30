@@ -39,6 +39,25 @@ As `chat_id` you can store:
 
 > Negative IDs are entered as-is — no escaping is needed.
 
+### Automatic resolution of @username and links
+
+If you pass a `@username` or a link (`t.me/…`, invite link `t.me/+…`) with an active session,
+`tguser` resolves the numeric ID and title for you and stores those:
+
+```bash
+tguser chat add news @somechannel
+# Added chat news → -1001234567890 (Some Channel)
+```
+
+To skip resolution and store the value as-is, add `--no-resolve`:
+
+```bash
+tguser chat add news @somechannel --no-resolve
+```
+
+> Don't know the ID or `@username`? See [08. Chat Discovery](08-discovery.md) —
+> the `dialogs` and `resolve` commands help you find an ID, including for private chats.
+
 ## List Chats
 
 ```bash
