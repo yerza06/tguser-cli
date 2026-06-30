@@ -1,0 +1,26 @@
+[project]
+name = "tguser"
+version = "0.1.0"
+description = "CLI для отправки сообщений в Telegram от имени пользователя (MTProto) для ИИ-агентов"
+readme = "README.md"
+requires-python = ">=3.13"
+authors = [{ name = "Yernaz Kengesbekov" }]
+dependencies = [
+    "kurigram>=2.2.0",
+    "tgcrypto>=1.2.5",
+    "typer>=0.15.0",
+    "rich>=13.9.0",
+    "pydantic-settings>=2.7.0",
+    "sqlalchemy>=2.0.36",
+    "aiosqlite>=0.20.0",
+]
+
+[project.scripts]
+tguser = "tguser.cli:app"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tguser"]

@@ -1,0 +1,15 @@
+# Секреты и сессии
+.env
+*.session
+*.session-journal
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+
+# Локальная БД (на случай, если попадёт в репозиторий)
+*.db
