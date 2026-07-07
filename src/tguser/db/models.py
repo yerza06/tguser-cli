@@ -1,4 +1,4 @@
-"""ORM-модели."""
+"""ORM models."""
 
 from __future__ import annotations
 
@@ -17,10 +17,10 @@ def _utcnow() -> datetime:
 
 
 class Chat(Base):
-    """Именованный идентификатор чата/группы/канала (alias → chat_id).
+    """A named chat/group/channel identifier (alias → chat_id).
 
-    ``chat_id`` хранится строкой, чтобы поддержать и числовые ID (``-100…``),
-    и ``@username``, и ``me``.
+    ``chat_id`` is stored as a string to support numeric IDs (``-100…``),
+    ``@username`` values, and ``me``.
     """
 
     __tablename__ = "chats"

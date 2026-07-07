@@ -1,4 +1,4 @@
-"""Команды обнаружения чатов: dialogs (список диалогов) и resolve (узнать ID)."""
+"""Chat discovery commands: dialogs (list dialogs) and resolve (find an ID)."""
 
 from __future__ import annotations
 
@@ -9,44 +9,43 @@ from ..client import require_login, run_async
 from ..config import get_settings
 from ..console import console, dialogs_table, fail, info, success
 from ..discover import fetch_dialogs, resolve_online
+from ..i18n import t
 
-# Отрицательные числовые ID не должны интерпретироваться как опции.
+# Negative numeric IDs must not be interpreted as options.
 ALLOW_NEG = {"ignore_unknown_options": True}
 
 app = typer.Typer()
 
 
-@app.command("dialogs")
+@app.command("dialogs", help=t("discovery.dialogs_help"))
 def dialogs(
     search: str | None = typer.Option(
-        None, "--search", "-s", help="Фильтр по названию или @username"
+        None, "--search", "-s", help=t("discovery.opt_search")
     ),
-    limit: int = typer.Option(100, "--limit", "-n", help="Сколько диалогов запросить"),
+    limit: int = typer.Option(100, "--limit", "-n", help=t("discovery.opt_limit")),
 ) -> None:
-    """Показать ваши диалоги (включая закрытые чаты) с их ID."""
+    """Show your dialogs (including private chats) with their IDs."""
     settings = get_settings()
     require_login(settings)
     rows = run_async(fetch_dialogs(settings, limit=limit, search=search))
     if not rows:
-        info("[dim]Диалоги не найдены.[/dim]")
+        info(t("discovery.no_dialogs"))
         return
     console.print(dialogs_table(rows))
 
 
-@app.command("resolve", context_settings=ALLOW_NEG)
+@app.command("resolve", context_settings=ALLOW_NEG, help=t("discovery.resolve_help"))
 def resolve(
-    query: str = typer.Argument(
-        ..., help="@username, t.me-ссылка или инвайт-ссылка t.me/+…"
-    ),
+    query: str = typer.Argument(..., help=t("discovery.arg_query")),
 ) -> None:
-    """Узнать числовой ID чата по @username или ссылке."""
+    """Find a chat's numeric ID by @username or link."""
     settings = get_settings()
     require_login(settings)
     try:
         chat_id, title, chat_type = run_async(resolve_online(settings, query))
     except RPCError as exc:
-        raise fail(str(exc), title="Не удалось определить чат")
+        raise fail(str(exc), title=t("discovery.resolve_failed_title"))
     success(
-        f"[bold]{title}[/bold] ({chat_type})\nID: [bold]{chat_id}[/bold]",
-        title="Чат найден",
+        t("discovery.chat_found", title=title, type=chat_type, id=chat_id),
+        title=t("discovery.chat_found_title"),
     )

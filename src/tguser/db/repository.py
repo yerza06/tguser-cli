@@ -1,7 +1,7 @@
-"""CRUD-операции над именованными чатами.
+"""CRUD operations on named chats.
 
-Каждая функция принимает фабрику сессий (из :func:`tguser.db.database.init_db`)
-и открывает собственную короткоживущую транзакцию.
+Each function takes a session factory (from :func:`tguser.db.database.init_db`)
+and opens its own short-lived transaction.
 """
 
 from __future__ import annotations
@@ -13,11 +13,11 @@ from .models import Chat
 
 
 class ChatExistsError(Exception):
-    """Чат с таким именем уже существует."""
+    """A chat with this name already exists."""
 
 
 class ChatNotFoundError(Exception):
-    """Чат с таким именем не найден."""
+    """A chat with this name was not found."""
 
 
 async def add_chat(
@@ -49,7 +49,7 @@ async def get_chat(sm: async_sessionmaker, name: str) -> Chat:
 
 
 async def find_chat(sm: async_sessionmaker, name: str) -> Chat | None:
-    """Вернуть чат по имени или ``None`` (без исключения)."""
+    """Return the chat by name, or ``None`` (without raising)."""
     async with sm() as session:
         return await session.scalar(select(Chat).where(Chat.name == name))
 

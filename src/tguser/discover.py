@@ -1,4 +1,4 @@
-"""Онлайн-обнаружение чатов через Kurigram: список диалогов и резолв по @username/ссылке."""
+"""Online chat discovery via Kurigram: listing dialogs and resolving by @username/link."""
 
 from __future__ import annotations
 
@@ -9,7 +9,7 @@ from .config import Settings
 
 
 def _chat_title(chat: Chat) -> str:
-    """Человекочитаемое название чата: title / имя пользователя / @username."""
+    """Human-readable chat name: title / user's name / @username."""
     if chat.title:
         return chat.title
     name = " ".join(filter(None, [chat.first_name, chat.last_name])).strip()
@@ -21,15 +21,15 @@ def _chat_title(chat: Chat) -> str:
 
 
 def _chat_type(chat: Chat) -> str:
-    """Тип чата строкой (``private``/``group``/``supergroup``/``channel``/``bot``)."""
+    """Chat type as a string (``private``/``group``/``supergroup``/``channel``/``bot``)."""
     return chat.type.name.lower() if chat.type is not None else "—"
 
 
 async def resolve_online(settings: Settings, query: str) -> tuple[int, str, str]:
-    """Резолв ``@username`` / t.me-ссылки / инвайт-ссылки в ``(id, title, type)``.
+    """Resolve a ``@username`` / t.me link / invite link into ``(id, title, type)``.
 
-    Поддерживает ``@username``, ``t.me/<name>``, приватные инвайт-ссылки ``t.me/+…``
-    и ссылки на сообщения ``t.me/c/<id>/<msg>``.
+    Supports ``@username``, ``t.me/<name>``, private invite links ``t.me/+…``,
+    and message links ``t.me/c/<id>/<msg>``.
     """
     client = build_client(settings)
     async with client:
@@ -40,10 +40,10 @@ async def resolve_online(settings: Settings, query: str) -> tuple[int, str, str]
 async def fetch_dialogs(
     settings: Settings, limit: int, search: str | None
 ) -> list[dict]:
-    """Список диалогов пользователя: ``[{id, title, type, username}, …]``.
+    """The user's dialogs: ``[{id, title, type, username}, …]``.
 
-    ``search`` (если задан) фильтрует по подстроке в названии или username
-    (регистронезависимо).
+    ``search`` (if given) filters by substring in the title or username
+    (case-insensitive).
     """
     needle = search.lower() if search else None
     out: list[dict] = []

@@ -10,6 +10,19 @@
 | `TGUSER_API_HASH` | — | api_hash с my.telegram.org |
 | `TGUSER_CONFIG_DIR` | `~/.config/tguser` | Каталог для сессии, БД и `.env` |
 | `TGUSER_SESSION_NAME` | `tguser` | Имя сессии (имя файла `<name>.session`) |
+| `TGUSER_LANG` | `en` | Язык вывода CLI: `en` или `ru` |
+
+## Язык интерфейса
+
+По умолчанию CLI (`--help`, сообщения, ошибки) выводится **на английском**. Чтобы
+переключить на русский, задайте `TGUSER_LANG=ru` — через переменную окружения или в `.env`:
+
+```bash
+export TGUSER_LANG=ru
+tguser --help          # справка на русском
+```
+
+> Неизвестное значение откатывается к английскому.
 
 ## Источники настроек и приоритет
 

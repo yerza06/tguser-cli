@@ -1,3 +1,3 @@
-"""tguser — CLI для отправки сообщений в Telegram от имени пользователя (MTProto)."""
+"""tguser — a CLI for sending Telegram messages as a user (MTProto)."""
 
 __version__ = "0.1.0"

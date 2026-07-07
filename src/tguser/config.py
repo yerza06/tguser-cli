@@ -1,8 +1,8 @@
-"""Конфигурация приложения через pydantic-settings.
+"""Application configuration via pydantic-settings.
 
-Источники (по приоритету): переменные окружения с префиксом ``TGUSER_`` и файл
-``~/.config/tguser/.env``. Сессия Kurigram и БД SQLite хранятся в ``config_dir``,
-чтобы команду ``tguser`` можно было запускать из любой директории.
+Sources (in priority order): environment variables prefixed with ``TGUSER_`` and the
+``~/.config/tguser/.env`` file. The Kurigram session and the SQLite DB live in
+``config_dir`` so that ``tguser`` can be run from any directory.
 """
 
 from __future__ import annotations
@@ -47,7 +47,7 @@ class Settings(BaseSettings):
         return self.config_dir / ".env"
 
     def ensure_config_dir(self) -> None:
-        """Создать каталог конфигурации, если его ещё нет."""
+        """Create the config directory if it does not exist yet."""
         self.config_dir.mkdir(parents=True, exist_ok=True)
 
     @property
@@ -56,14 +56,14 @@ class Settings(BaseSettings):
 
 
 def get_settings() -> Settings:
-    """Загрузить настройки (каталог конфигурации создаётся при необходимости)."""
+    """Load settings (the config directory is created if needed)."""
     settings = Settings()
     settings.ensure_config_dir()
     return settings
 
 
 def save_credentials(settings: Settings, api_id: int, api_hash: str) -> None:
-    """Записать api_id/api_hash в ``~/.config/tguser/.env`` (создаёт/обновляет файл)."""
+    """Write api_id/api_hash to ``~/.config/tguser/.env`` (creates/updates the file)."""
     settings.ensure_config_dir()
     lines: dict[str, str] = {}
     if settings.env_file.exists():
@@ -81,6 +81,6 @@ def save_credentials(settings: Settings, api_id: int, api_hash: str) -> None:
     settings.env_file.write_text(content, encoding="utf-8")
     settings.env_file.chmod(0o600)
 
-    # Обновляем объект настроек в памяти, чтобы не перечитывать.
+    # Update the in-memory settings object so we don't have to re-read.
     settings.api_id = api_id
     settings.api_hash = api_hash

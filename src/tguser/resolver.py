@@ -1,4 +1,4 @@
-"""Резолв цели отправки: alias из БД → chat_id, иначе значение как есть."""
+"""Resolve the send target: an alias from the DB → chat_id, otherwise the value as-is."""
 
 from __future__ import annotations
 
@@ -8,7 +8,7 @@ from .db.repository import find_chat
 
 
 def _coerce(value: str) -> str | int:
-    """Числовую строку привести к int, остальное (``@username``, ``me``) оставить строкой."""
+    """Convert a numeric string to int; leave the rest (``@username``, ``me``) as a string."""
     raw = value.strip()
     try:
         return int(raw)
@@ -17,9 +17,9 @@ def _coerce(value: str) -> str | int:
 
 
 async def resolve_target(sm: async_sessionmaker, value: str) -> str | int:
-    """Если ``value`` — имя сохранённого чата, вернуть его chat_id; иначе сам ``value``.
+    """If ``value`` is a saved chat name, return its chat_id; otherwise ``value`` itself.
 
-    Kurigram ``send_*`` принимают и int (chat id), и строку (``@username``/``me``).
+    Kurigram ``send_*`` accepts both an int (chat id) and a string (``@username``/``me``).
     """
     chat = await find_chat(sm, value)
     target = chat.chat_id if chat is not None else value

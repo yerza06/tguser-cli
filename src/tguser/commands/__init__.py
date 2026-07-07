@@ -1,1 +1,1 @@
-"""Подкоманды CLI tguser."""
+"""tguser CLI subcommands."""

@@ -1,4 +1,4 @@
-"""Команды авторизации: login / logout / whoami."""
+"""Authentication commands: login / logout / whoami."""
 
 from __future__ import annotations
 
@@ -14,24 +14,22 @@ from rich.table import Table
 from ..client import build_client, run_async
 from ..config import Settings, get_settings, save_credentials
 from ..console import console, fail, success
+from ..i18n import t
 
-app = typer.Typer(help="Авторизация Telegram-аккаунта.")
+app = typer.Typer(help=t("auth.help"))
 
 
 def _ensure_credentials(
     settings: Settings, api_id: int | None, api_hash: str | None
 ) -> None:
-    """Дополнить недостающие api_id/api_hash из промптов и сохранить в .env."""
+    """Fill missing api_id/api_hash from prompts and persist them to .env."""
     if api_id is None:
         api_id = settings.api_id
     if api_hash is None:
         api_hash = settings.api_hash
 
     if api_id is None:
-        console.print(
-            "Получите api_id/api_hash на [link]https://my.telegram.org[/link] "
-            "(API development tools)."
-        )
+        console.print(t("auth.get_credentials"))
         api_id = int(Prompt.ask("api_id"))
     if not api_hash:
         api_hash = Prompt.ask("api_hash")
@@ -43,13 +41,13 @@ async def _login(settings: Settings, phone: str | None) -> None:
     client = build_client(settings)
     await client.connect()
     try:
-        phone = phone or Prompt.ask("Номер телефона (в формате +7…)")
+        phone = phone or Prompt.ask(t("auth.prompt_phone"))
         sent = await client.send_code(phone)
-        code = Prompt.ask("Код из Telegram")
+        code = Prompt.ask(t("auth.prompt_code"))
         try:
             await client.sign_in(phone, sent.phone_code_hash, code)
         except SessionPasswordNeeded:
-            password = Prompt.ask("Пароль двухфакторной аутентификации", password=True)
+            password = Prompt.ask(t("auth.prompt_password"), password=True)
             await client.check_password(password)
 
         me = await client.get_me()
@@ -58,25 +56,24 @@ async def _login(settings: Settings, phone: str | None) -> None:
 
     handle = f"@{me.username}" if me.username else "—"
     success(
-        f"Вход выполнен как [bold]{me.first_name or ''}[/bold] "
-        f"({handle}, id={me.id})",
-        title="Авторизация",
+        t("auth.signed_in", name=me.first_name or "", handle=handle, id=me.id),
+        title=t("auth.title"),
     )
 
 
-@app.command()
+@app.command(help=t("auth.login_help"))
 def login(
-    api_id: int | None = typer.Option(None, "--api-id", help="api_id с my.telegram.org"),
-    api_hash: str | None = typer.Option(None, "--api-hash", help="api_hash с my.telegram.org"),
-    phone: str | None = typer.Option(None, "--phone", help="Номер телефона"),
+    api_id: int | None = typer.Option(None, "--api-id", help=t("auth.opt_api_id")),
+    api_hash: str | None = typer.Option(None, "--api-hash", help=t("auth.opt_api_hash")),
+    phone: str | None = typer.Option(None, "--phone", help=t("auth.opt_phone")),
 ) -> None:
-    """Войти в Telegram-аккаунт (интерактивно)."""
+    """Sign in to the Telegram account (interactive)."""
     settings = get_settings()
     _ensure_credentials(settings, api_id, api_hash)
     try:
         run_async(_login(settings, phone))
     except (PhoneCodeInvalid, BadRequest) as exc:
-        raise fail(str(exc), title="Не удалось войти")
+        raise fail(str(exc), title=t("auth.login_failed"))
 
 
 async def _logout(settings: Settings) -> None:
@@ -85,22 +82,22 @@ async def _logout(settings: Settings) -> None:
     try:
         await client.log_out()
     finally:
-        # log_out уже разрывает соединение; disconnect на всякий случай игнорируем.
+        # log_out already tears down the connection; ignore a redundant disconnect.
         try:
             await client.disconnect()
         except ConnectionError:
             pass
 
 
-@app.command()
+@app.command(help=t("auth.logout_help"))
 def logout() -> None:
-    """Выйти из аккаунта и удалить локальную сессию."""
+    """Log out and delete the local session."""
     settings = get_settings()
     if not settings.session_file.exists():
-        raise fail("Активной сессии нет.", title="Нет сессии")
+        raise fail(t("auth.no_active_session"), title=t("client.no_session_title"))
     run_async(_logout(settings))
     settings.session_file.unlink(missing_ok=True)
-    success("Сессия удалена, выход выполнен.", title="Выход")
+    success(t("auth.logged_out"), title=t("auth.logout_title"))
 
 
 async def _whoami(settings: Settings) -> Table:
@@ -108,19 +105,19 @@ async def _whoami(settings: Settings) -> Table:
     async with client:
         me = await client.get_me()
 
-    table = Table(title="Текущий аккаунт", header_style="bold cyan", show_header=False)
-    table.add_column("Поле", style="bold")
-    table.add_column("Значение")
+    table = Table(title=t("auth.whoami_title"), header_style="bold cyan", show_header=False)
+    table.add_column("field", style="bold")
+    table.add_column("value")
     table.add_row("ID", str(me.id))
-    table.add_row("Имя", f"{me.first_name or ''} {me.last_name or ''}".strip() or "—")
+    table.add_row(t("auth.field_name"), f"{me.first_name or ''} {me.last_name or ''}".strip() or "—")
     table.add_row("Username", f"@{me.username}" if me.username else "—")
-    table.add_row("Телефон", f"+{me.phone_number}" if me.phone_number else "—")
+    table.add_row(t("auth.field_phone"), f"+{me.phone_number}" if me.phone_number else "—")
     return table
 
 
-@app.command()
+@app.command(help=t("auth.whoami_help"))
 def whoami() -> None:
-    """Показать данные текущего аккаунта."""
+    """Show the current account details."""
     from ..client import require_login
 
     settings = get_settings()

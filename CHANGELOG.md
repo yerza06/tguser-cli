@@ -20,6 +20,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `src/tguser/discover.py` module with `resolve_online()` and `fetch_dialogs()` online helpers.
 - Documentation: new section `08-discovery.md` (RU/EN) explaining how to find a chat ID,
   including private chats without a `@username`.
+- Internationalization (`src/tguser/i18n.py`): the CLI now speaks **English by default** —
+  all `--help` texts, prompts, and messages. Set `TGUSER_LANG=ru` (env var or `.env`) to switch
+  to Russian; unknown values fall back to English.
+
+### Changed
+
+- All in-code comments and docstrings translated to English.
 
 ## [0.1.0]
 

@@ -1,13 +1,14 @@
-"""Команды отправки: текст, файлы, фото, аудио, видео, голосовое, кружок, стикер, контакт.
+"""Sending commands: text, files, photo, audio, video, voice, video note, sticker, contact.
 
-Все медиа-команды поддерживают два синтаксиса:
+All media commands accept two syntaxes:
 
-* через флаги:   ``tguser sendphoto a.png b.png --to chat --caption "текст"``
-* позиционно:    ``tguser sendphoto a.png b.png chat "текст"``
+* via flags:   ``tguser sendphoto a.png b.png --to chat --caption "text"``
+* positional:  ``tguser sendphoto a.png b.png chat "text"``
 
-Граница между файлами и (целью, подписью) определяется так: ведущие позиционные
-аргументы, существующие как файлы на диске, считаются контентом; первый оставшийся
-токен — это цель (если не задан ``--to``), второй — подпись (если не задан ``--caption``).
+The boundary between files and (target, caption) is determined as follows: leading
+positional arguments that exist as files on disk are treated as content; the first
+remaining token is the target (unless ``--to`` is set), the second is the caption
+(unless ``--caption`` is set).
 """
 
 from __future__ import annotations
@@ -21,25 +22,26 @@ from ..client import build_client, require_login, run_async
 from ..config import Settings, get_settings
 from ..console import console, fail, success
 from ..db.database import init_db
+from ..i18n import t
 from ..resolver import resolve_target
 
-app = typer.Typer(help="Отправка сообщений и медиа.")
+app = typer.Typer(help=t("send.help"))
 
-# Цель может быть отрицательным ID канала/группы (-100…); разрешаем такие токены
-# как позиционные аргументы / значения опций, а не трактуем их как опции.
+# The target may be a negative channel/group ID (-100…); allow such tokens as
+# positional arguments / option values instead of treating them as options.
 ALLOW_NEG = {"ignore_unknown_options": True}
 
 
 # --------------------------------------------------------------------------- #
-# Разбор позиционных аргументов
+# Positional argument parsing
 # --------------------------------------------------------------------------- #
 def _split_media_args(
     items: list[str], to: str | None, caption: str | None
 ) -> tuple[list[str], str, str | None]:
-    """Разделить позиционные аргументы на (файлы, цель, подпись).
+    """Split positional arguments into (files, target, caption).
 
-    Ведущие токены-файлы → контент; следующий → цель (если нет ``--to``);
-    следующий → подпись (если нет ``--caption``).
+    Leading file-tokens → content; the next → target (unless ``--to``);
+    the next → caption (unless ``--caption``).
     """
     files: list[str] = []
     for token in items:
@@ -55,32 +57,33 @@ def _split_media_args(
         caption = rest.pop(0)
 
     if not files:
-        raise fail(
-            "Не найдено ни одного существующего файла. Проверьте пути.",
-            title="Нет файлов",
-        )
+        raise fail(t("send.no_files"), title=t("send.no_files_title"))
     if rest:
         raise fail(
-            f"Лишние аргументы: {' '.join(rest)}", title="Неверные аргументы"
+            t("common.extra_args", args=" ".join(rest)),
+            title=t("common.invalid_args"),
         )
     if to is None:
-        raise fail("Не указана цель. Используйте --to или позиционный аргумент.")
+        raise fail(t("common.no_target"))
     return files, to, caption
 
 
 def _pick_target_caption(
     rest: list[str], to: str | None, caption: str | None
 ) -> tuple[str, str | None]:
-    """Для команд без файлов: взять цель/подпись из ``--to``/``--caption`` или хвоста."""
+    """For file-less commands: take target/caption from ``--to``/``--caption`` or the tail."""
     rest = list(rest)
     if to is None and rest:
         to = rest.pop(0)
     if caption is None and rest:
         caption = rest.pop(0)
     if rest:
-        raise fail(f"Лишние аргументы: {' '.join(rest)}", title="Неверные аргументы")
+        raise fail(
+            t("common.extra_args", args=" ".join(rest)),
+            title=t("common.invalid_args"),
+        )
     if to is None:
-        raise fail("Не указана цель. Используйте --to или позиционный аргумент.")
+        raise fail(t("common.no_target"))
     return to, caption
 
 
@@ -89,21 +92,21 @@ def _validate_files(files: list[str]) -> list[str]:
     for f in files:
         p = Path(f).expanduser()
         if not p.exists():
-            raise fail(f"Файл не найден: {f}", title="Нет файла")
+            raise fail(t("send.file_not_found", file=f), title=t("send.no_file_title"))
         resolved.append(str(p))
     return resolved
 
 
 # --------------------------------------------------------------------------- #
-# Общий запуск отправки
+# Shared send runner
 # --------------------------------------------------------------------------- #
 async def _run_send(settings: Settings, target_value: str, sender) -> str | int:
-    """Резолвит цель, открывает клиент и вызывает ``sender(client, target)``."""
+    """Resolve the target, open the client and call ``sender(client, target)``."""
     sm = await init_db(settings.db_path)
     target = await resolve_target(sm, target_value)
     client = build_client(settings)
     async with client:
-        with console.status("[cyan]Отправка…", spinner="dots"):
+        with console.status(t("send.sending"), spinner="dots"):
             await sender(client, target)
     return target
 
@@ -112,20 +115,20 @@ def _dispatch(target_value: str, sender) -> None:
     settings = get_settings()
     require_login(settings)
     target = run_async(_run_send(settings, target_value, sender))
-    success(f"Отправлено в [bold]{target}[/bold]")
+    success(t("send.sent", target=target))
 
 
 # --------------------------------------------------------------------------- #
-# Текст
+# Text
 # --------------------------------------------------------------------------- #
-@app.command(context_settings=ALLOW_NEG)
+@app.command(context_settings=ALLOW_NEG, help=t("send.cmd_send"))
 def send(
-    message: str = typer.Argument(..., help="Текст сообщения"),
-    rest: list[str] | None = typer.Argument(None, help="[цель] [подпись]"),
-    to: str | None = typer.Option(None, "--to", help="Цель: имя чата / ID / @username"),
-    caption: str | None = typer.Option(None, "--caption", help="Доп. подпись к тексту"),
+    message: str = typer.Argument(..., help=t("send.arg_message")),
+    rest: list[str] | None = typer.Argument(None, help=t("send.arg_rest")),
+    to: str | None = typer.Option(None, "--to", help=t("send.opt_to_full")),
+    caption: str | None = typer.Option(None, "--caption", help=t("send.opt_caption_text")),
 ) -> None:
-    """Отправить текстовое сообщение."""
+    """Send a text message."""
     target, cap = _pick_target_caption(rest or [], to, caption)
     text = message if not cap else f"{message}\n\n{cap}"
 
@@ -136,15 +139,15 @@ def send(
 
 
 # --------------------------------------------------------------------------- #
-# Медиа из файлов
+# Media from files
 # --------------------------------------------------------------------------- #
-@app.command(context_settings=ALLOW_NEG)
+@app.command(context_settings=ALLOW_NEG, help=t("send.cmd_sendfile"))
 def sendfile(
-    items: list[str] = typer.Argument(..., help="Файлы [цель] [подпись]"),
-    to: str | None = typer.Option(None, "--to", help="Цель"),
-    caption: str | None = typer.Option(None, "--caption", help="Подпись"),
+    items: list[str] = typer.Argument(..., help=t("send.arg_files")),
+    to: str | None = typer.Option(None, "--to", help=t("send.opt_to")),
+    caption: str | None = typer.Option(None, "--caption", help=t("send.opt_caption")),
 ) -> None:
-    """Отправить файл(ы) как документ."""
+    """Send file(s) as a document."""
     files, target, cap = _split_media_args(items, to, caption)
     files = _validate_files(files)
 
@@ -155,13 +158,13 @@ def sendfile(
     _dispatch(target, sender)
 
 
-@app.command(context_settings=ALLOW_NEG)
+@app.command(context_settings=ALLOW_NEG, help=t("send.cmd_sendphoto"))
 def sendphoto(
-    items: list[str] = typer.Argument(..., help="Фото [цель] [подпись]"),
-    to: str | None = typer.Option(None, "--to", help="Цель"),
-    caption: str | None = typer.Option(None, "--caption", help="Подпись"),
+    items: list[str] = typer.Argument(..., help=t("send.arg_photos")),
+    to: str | None = typer.Option(None, "--to", help=t("send.opt_to")),
+    caption: str | None = typer.Option(None, "--caption", help=t("send.opt_caption")),
 ) -> None:
-    """Отправить фото (несколько — альбомом)."""
+    """Send a photo (multiple → album)."""
     files, target, cap = _split_media_args(items, to, caption)
     files = _validate_files(files)
 
@@ -178,13 +181,13 @@ def sendphoto(
     _dispatch(target, sender)
 
 
-@app.command(context_settings=ALLOW_NEG)
+@app.command(context_settings=ALLOW_NEG, help=t("send.cmd_sendvideo"))
 def sendvideo(
-    items: list[str] = typer.Argument(..., help="Видео [цель] [подпись]"),
-    to: str | None = typer.Option(None, "--to", help="Цель"),
-    caption: str | None = typer.Option(None, "--caption", help="Подпись"),
+    items: list[str] = typer.Argument(..., help=t("send.arg_videos")),
+    to: str | None = typer.Option(None, "--to", help=t("send.opt_to")),
+    caption: str | None = typer.Option(None, "--caption", help=t("send.opt_caption")),
 ) -> None:
-    """Отправить видео (несколько — альбомом)."""
+    """Send a video (multiple → album)."""
     files, target, cap = _split_media_args(items, to, caption)
     files = _validate_files(files)
 
@@ -201,13 +204,13 @@ def sendvideo(
     _dispatch(target, sender)
 
 
-@app.command(context_settings=ALLOW_NEG)
+@app.command(context_settings=ALLOW_NEG, help=t("send.cmd_sendaudio"))
 def sendaudio(
-    items: list[str] = typer.Argument(..., help="Аудио [цель] [подпись]"),
-    to: str | None = typer.Option(None, "--to", help="Цель"),
-    caption: str | None = typer.Option(None, "--caption", help="Подпись"),
+    items: list[str] = typer.Argument(..., help=t("send.arg_audio")),
+    to: str | None = typer.Option(None, "--to", help=t("send.opt_to")),
+    caption: str | None = typer.Option(None, "--caption", help=t("send.opt_caption")),
 ) -> None:
-    """Отправить аудио/музыку."""
+    """Send audio / music."""
     files, target, cap = _split_media_args(items, to, caption)
     files = _validate_files(files)
 
@@ -218,13 +221,13 @@ def sendaudio(
     _dispatch(target, sender)
 
 
-@app.command(context_settings=ALLOW_NEG)
+@app.command(context_settings=ALLOW_NEG, help=t("send.cmd_sendvoice"))
 def sendvoice(
-    items: list[str] = typer.Argument(..., help="Файл [цель] [подпись]"),
-    to: str | None = typer.Option(None, "--to", help="Цель"),
-    caption: str | None = typer.Option(None, "--caption", help="Подпись"),
+    items: list[str] = typer.Argument(..., help=t("send.arg_voice")),
+    to: str | None = typer.Option(None, "--to", help=t("send.opt_to")),
+    caption: str | None = typer.Option(None, "--caption", help=t("send.opt_caption")),
 ) -> None:
-    """Отправить голосовое сообщение."""
+    """Send a voice message."""
     files, target, cap = _split_media_args(items, to, caption)
     files = _validate_files(files)
 
@@ -234,12 +237,12 @@ def sendvoice(
     _dispatch(target, sender)
 
 
-@app.command(context_settings=ALLOW_NEG)
+@app.command(context_settings=ALLOW_NEG, help=t("send.cmd_sendvideonote"))
 def sendvideonote(
-    items: list[str] = typer.Argument(..., help="Файл [цель]"),
-    to: str | None = typer.Option(None, "--to", help="Цель"),
+    items: list[str] = typer.Argument(..., help=t("send.arg_note")),
+    to: str | None = typer.Option(None, "--to", help=t("send.opt_to")),
 ) -> None:
-    """Отправить видео-кружок (video note)."""
+    """Send a video note."""
     files, target, _ = _split_media_args(items, to, None)
     files = _validate_files(files)
 
@@ -249,12 +252,12 @@ def sendvideonote(
     _dispatch(target, sender)
 
 
-@app.command(context_settings=ALLOW_NEG)
+@app.command(context_settings=ALLOW_NEG, help=t("send.cmd_sendsticker"))
 def sendsticker(
-    items: list[str] = typer.Argument(..., help="Файл .tgs/.webp [цель]"),
-    to: str | None = typer.Option(None, "--to", help="Цель"),
+    items: list[str] = typer.Argument(..., help=t("send.arg_sticker")),
+    to: str | None = typer.Option(None, "--to", help=t("send.opt_to")),
 ) -> None:
-    """Отправить стикер."""
+    """Send a sticker."""
     files, target, _ = _split_media_args(items, to, None)
     files = _validate_files(files)
 
@@ -265,38 +268,39 @@ def sendsticker(
 
 
 # --------------------------------------------------------------------------- #
-# Контакт
+# Contact
 # --------------------------------------------------------------------------- #
-@app.command(context_settings=ALLOW_NEG)
+@app.command(context_settings=ALLOW_NEG, help=t("send.cmd_sendcontact"))
 def sendcontact(
-    args: list[str] | None = typer.Argument(
-        None, help="Позиционно: <phone> <first> [last] <target>"
-    ),
-    phone: str | None = typer.Option(None, "--phone", help="Номер телефона"),
-    first_name: str | None = typer.Option(None, "--first-name", help="Имя"),
-    last_name: str | None = typer.Option(None, "--last-name", help="Фамилия"),
-    to: str | None = typer.Option(None, "--to", help="Цель"),
+    args: list[str] | None = typer.Argument(None, help=t("send.arg_contact")),
+    phone: str | None = typer.Option(None, "--phone", help=t("send.opt_phone")),
+    first_name: str | None = typer.Option(None, "--first-name", help=t("send.opt_first")),
+    last_name: str | None = typer.Option(None, "--last-name", help=t("send.opt_last")),
+    to: str | None = typer.Option(None, "--to", help=t("send.opt_to")),
 ) -> None:
-    """Отправить контакт."""
+    """Send a contact."""
     args = list(args or [])
 
-    # Позиционный разбор, только если соответствующие флаги не заданы.
+    # Positional parsing only applies when the matching flags are not set.
     if phone is None and args:
         phone = args.pop(0)
     if first_name is None and args:
         first_name = args.pop(0)
-    # Если осталось 2 токена — это [last_name, target]; если 1 — это target.
+    # If 2 tokens remain — they are [last_name, target]; if 1 — it is the target.
     if len(args) >= 2 and last_name is None:
         last_name = args.pop(0)
     if to is None and args:
         to = args.pop(0)
 
     if args:
-        raise fail(f"Лишние аргументы: {' '.join(args)}", title="Неверные аргументы")
+        raise fail(
+            t("common.extra_args", args=" ".join(args)),
+            title=t("common.invalid_args"),
+        )
     if not phone or not first_name:
-        raise fail("Нужны --phone и --first-name (или позиционно).")
+        raise fail(t("send.contact_need_fields"))
     if to is None:
-        raise fail("Не указана цель. Используйте --to или позиционный аргумент.")
+        raise fail(t("common.no_target"))
 
     async def sender(client, tgt):
         await client.send_contact(

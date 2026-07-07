@@ -1,4 +1,4 @@
-"""Фабрика клиента Kurigram и хелпер запуска корутин."""
+"""Kurigram client factory and a coroutine runner helper."""
 
 from __future__ import annotations
 
@@ -13,12 +13,12 @@ T = TypeVar("T")
 
 
 def run_async(coro: Awaitable[T]) -> T:
-    """Выполнить корутину из синхронной команды Typer."""
+    """Run a coroutine from a synchronous Typer command."""
     return asyncio.run(coro)
 
 
 def build_client(settings: Settings) -> Client:
-    """Создать клиент Kurigram. Сессия и workdir — в каталоге конфигурации."""
+    """Create a Kurigram client. Session and workdir live in the config directory."""
     return Client(
         name=settings.session_name,
         api_id=settings.api_id,
@@ -28,16 +28,11 @@ def build_client(settings: Settings) -> Client:
 
 
 def require_login(settings: Settings) -> None:
-    """Проверить, что есть учётные данные и файл сессии, иначе подсказать вход."""
+    """Ensure credentials and a session file exist, otherwise prompt to sign in."""
     from .console import fail
+    from .i18n import t
 
     if not settings.has_credentials:
-        raise fail(
-            "Не заданы api_id/api_hash. Выполните: [bold]tguser login[/bold]",
-            title="Нет учётных данных",
-        )
+        raise fail(t("client.no_credentials"), title=t("client.no_credentials_title"))
     if not settings.session_file.exists():
-        raise fail(
-            "Сессия не найдена. Сначала войдите: [bold]tguser login[/bold]",
-            title="Нет сессии",
-        )
+        raise fail(t("client.no_session"), title=t("client.no_session_title"))

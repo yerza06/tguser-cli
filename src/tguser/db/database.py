@@ -1,4 +1,4 @@
-"""Async-движок и фабрика сессий SQLAlchemy."""
+"""SQLAlchemy async engine and session factory."""
 
 from __future__ import annotations
 
@@ -17,7 +17,7 @@ def _make_url(db_path: Path) -> str:
 
 
 async def init_db(db_path: Path) -> async_sessionmaker:
-    """Лениво создать движок и таблицы, вернуть фабрику сессий."""
+    """Lazily create the engine and tables, and return the session factory."""
     global _engine, _sessionmaker
 
     if _sessionmaker is None:
