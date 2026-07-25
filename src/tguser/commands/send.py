@@ -16,6 +16,7 @@ from __future__ import annotations
 from pathlib import Path
 
 import typer
+from pyrogram.errors import RPCError
 from pyrogram.types import InputMediaPhoto, InputMediaVideo
 
 from ..client import build_client, require_login, run_async
@@ -114,7 +115,13 @@ async def _run_send(settings: Settings, target_value: str, sender) -> str | int:
 def _dispatch(target_value: str, sender) -> None:
     settings = get_settings()
     require_login(settings)
-    target = run_async(_run_send(settings, target_value, sender))
+    try:
+        target = run_async(_run_send(settings, target_value, sender))
+    except RPCError as exc:
+        raise fail(
+            t("send.failed", target=target_value, error=exc),
+            title=t("send.failed_title"),
+        )
     success(t("send.sent", target=target))
 
 

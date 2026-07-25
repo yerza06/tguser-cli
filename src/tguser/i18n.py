@@ -76,6 +76,11 @@ MESSAGES: dict[str, dict[str, str]] = {
         "en": "No target specified. Use --to or a positional argument.",
         "ru": "Не указана цель. Используйте --to или позиционный аргумент.",
     },
+    "common.telegram_error_title": {"en": "Telegram error", "ru": "Ошибка Telegram"},
+    "common.unexpected_error_title": {
+        "en": "Unexpected error",
+        "ru": "Непредвиденная ошибка",
+    },
     # --- app / cli --------------------------------------------------------
     "app.help": {
         "en": "Send Telegram messages as a user (MTProto) for AI agents.",
@@ -244,6 +249,11 @@ MESSAGES: dict[str, dict[str, str]] = {
     "send.sent": {
         "en": "Sent to [bold]{target}[/bold]",
         "ru": "Отправлено в [bold]{target}[/bold]",
+    },
+    "send.failed_title": {"en": "Could not send", "ru": "Не удалось отправить"},
+    "send.failed": {
+        "en": "Failed to send to '{target}': {error}",
+        "ru": "Не удалось отправить в «{target}»: {error}",
     },
     "send.cmd_send": {
         "en": "Send a text message.",
