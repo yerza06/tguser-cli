@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- `sendfile -G/--group` option for sending documents as albums, automatically split into
+  groups of up to 10 files.
 - `tguser dialogs` command — lists all dialogs you are a member of (private chats, groups,
   private groups and channels) with their numeric IDs. Supports `--search/-s` (filter by title
   or `@username`) and `--limit/-n`.

@@ -16,7 +16,8 @@ from __future__ import annotations
 from pathlib import Path
 
 import typer
-from pyrogram.types import InputMediaPhoto, InputMediaVideo
+from pyrogram.errors import RPCError
+from pyrogram.types import InputMediaDocument, InputMediaPhoto, InputMediaVideo
 
 from ..client import build_client, require_login, run_async
 from ..config import Settings, get_settings
@@ -30,6 +31,7 @@ app = typer.Typer(help=t("send.help"))
 # The target may be a negative channel/group ID (-100…); allow such tokens as
 # positional arguments / option values instead of treating them as options.
 ALLOW_NEG = {"ignore_unknown_options": True}
+MEDIA_GROUP_MAX_ITEMS = 10
 
 
 # --------------------------------------------------------------------------- #
@@ -114,7 +116,13 @@ async def _run_send(settings: Settings, target_value: str, sender) -> str | int:
 def _dispatch(target_value: str, sender) -> None:
     settings = get_settings()
     require_login(settings)
-    target = run_async(_run_send(settings, target_value, sender))
+    try:
+        target = run_async(_run_send(settings, target_value, sender))
+    except RPCError as exc:
+        raise fail(
+            t("send.failed", target=target_value, error=exc),
+            title=t("send.failed_title"),
+        )
     success(t("send.sent", target=target))
 
 
@@ -146,14 +154,36 @@ def sendfile(
     items: list[str] = typer.Argument(..., help=t("send.arg_files")),
     to: str | None = typer.Option(None, "--to", help=t("send.opt_to")),
     caption: str | None = typer.Option(None, "--caption", help=t("send.opt_caption")),
+    group: bool = typer.Option(
+        False, "--group", "-G", help=t("send.opt_group")
+    ),
 ) -> None:
     """Send file(s) as a document."""
     files, target, cap = _split_media_args(items, to, caption)
     files = _validate_files(files)
 
     async def sender(client, tgt):
-        for index, path in enumerate(files):
-            await client.send_document(tgt, path, caption=cap if index == 0 else None)
+        if not group or len(files) == 1:
+            for index, path in enumerate(files):
+                await client.send_document(
+                    tgt, path, caption=cap if index == 0 else None
+                )
+            return
+
+        for start in range(0, len(files), MEDIA_GROUP_MAX_ITEMS):
+            batch = files[start : start + MEDIA_GROUP_MAX_ITEMS]
+            if len(batch) == 1:
+                await client.send_document(tgt, batch[0])
+                continue
+
+            media = [
+                InputMediaDocument(
+                    path,
+                    caption=cap if start == 0 and index == 0 else None,
+                )
+                for index, path in enumerate(batch)
+            ]
+            await client.send_media_group(tgt, media)
 
     _dispatch(target, sender)
 

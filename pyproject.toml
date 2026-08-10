@@ -16,7 +16,7 @@ dependencies = [
 ]
 
 [project.scripts]
-tguser = "tguser.cli:app"
+tguser = "tguser.cli:main"
 
 [build-system]
 requires = ["hatchling"]
