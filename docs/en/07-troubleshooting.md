@@ -1,5 +1,29 @@
 # 07. Troubleshooting
 
+## `tguser: command not found`
+
+Either the tool is not installed globally, or the directory holding its executable is not on your
+`PATH`.
+
+1. Install it from the project root: `uv tool install .`
+   (see [01. Installation](01-installation.md)).
+2. Check that it registered: `uv tool list` should include `tguser`.
+3. If it is installed but the command still isn't found, `~/.local/bin` is missing from `PATH`.
+   Add it with `uv tool update-shell`, then restart the terminal.
+
+To verify: `which tguser` should print a path like `/home/<user>/.local/bin/tguser`.
+
+## Code changes don't take effect
+
+`uv tool install .` copies the code at install time, so edits in the repository do not affect an
+already installed tool. Reinstall it:
+
+```bash
+uv tool install . --force
+```
+
+Or install in editable mode (`uv tool install -e .`), where changes are picked up immediately.
+
 ## "No credentials" — api_id/api_hash are not set
 
 ```

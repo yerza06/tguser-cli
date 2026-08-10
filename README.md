@@ -15,8 +15,22 @@ Pydantic-Settings · SQLAlchemy 2.0 (async) + aiosqlite.
 ## Установка
 
 ```bash
-uv sync
+uv tool install .
 ```
+
+Команда собирает пакет, создаёт для него изолированное окружение в
+`~/.local/share/uv/tools/tguser/` и кладёт исполняемый файл в `~/.local/bin/tguser`. После этого
+`tguser` вызывается **из любой директории** — без `uv run` и без перехода в корень репозитория.
+Это то, что нужно ИИ-агентам: их рабочий каталог заранее неизвестен.
+
+```bash
+uv tool install . --force    # переустановить после изменений в коде
+uv tool install -e .         # editable-режим: правки применяются сразу
+uv tool uninstall tguser     # удалить
+```
+
+Для разработки самого инструмента достаточно `uv sync` — тогда запуск идёт через
+`uv run tguser …` из корня проекта. Подробности — в [docs/ru/01-installation.md](docs/ru/01-installation.md).
 
 ## Авторизация
 
@@ -24,9 +38,9 @@ uv sync
 затем войдите:
 
 ```bash
-uv run tguser login            # спросит api_id/api_hash (если не заданы), телефон и код
-uv run tguser whoami           # показать текущий аккаунт
-uv run tguser logout           # выйти и удалить сессию
+tguser login            # спросит api_id/api_hash (если не заданы), телефон и код
+tguser whoami           # показать текущий аккаунт
+tguser logout           # выйти и удалить сессию
 ```
 
 Учётные данные сохраняются в `~/.config/tguser/.env`, сессия — в `~/.config/tguser/tguser.session`,

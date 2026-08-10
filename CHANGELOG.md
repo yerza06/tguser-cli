@@ -28,6 +28,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Documentation now recommends installing globally with `uv tool install .` instead of running
+  through `uv run` from the repository: `01-installation.md` (RU/EN) explains what the command does
+  (isolated environment in `~/.local/share/uv/tools/`, executable in `~/.local/bin/`), how to
+  reinstall (`--force`), and the editable variant (`-e`); `uv sync` + `uv run` is kept as the
+  development workflow.
+- `06-ai-agents.md` (RU/EN) filled in: why agents need a global install (arbitrary working
+  directory), global state in `~/.config/tguser/`, exit codes, and typical calls.
+- `07-troubleshooting.md` (RU/EN): new entries for `tguser: command not found` (PATH /
+  `uv tool update-shell`) and for code changes not taking effect after `uv tool install`.
 - All in-code comments and docstrings translated to English.
 
 ## [0.1.0]
