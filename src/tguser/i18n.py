@@ -294,6 +294,10 @@ MESSAGES: dict[str, dict[str, str]] = {
     },
     "send.opt_to": {"en": "Target", "ru": "Цель"},
     "send.opt_caption": {"en": "Caption", "ru": "Подпись"},
+    "send.opt_group": {
+        "en": "Group multiple documents into albums",
+        "ru": "Сгруппировать несколько документов в альбомы",
+    },
     "send.arg_files": {"en": "Files [target] [caption]", "ru": "Файлы [цель] [подпись]"},
     "send.arg_photos": {"en": "Photos [target] [caption]", "ru": "Фото [цель] [подпись]"},
     "send.arg_videos": {"en": "Videos [target] [caption]", "ru": "Видео [цель] [подпись]"},

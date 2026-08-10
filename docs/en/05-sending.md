@@ -68,7 +68,13 @@ tguser send "Title" --to me --caption "Details below"
 ```bash
 tguser sendfile report.pdf --to work --caption "Report"
 tguser sendfile a.zip b.zip --to work          # multiple documents
+tguser sendfile a.zip b.zip --to work --group  # group into an album
 ```
+
+Without `--group`, documents are sent as separate messages. With `-G/--group`, multiple
+documents are sent as an album. Telegram allows up to 10 documents per album, so larger
+sets are automatically split into groups of 10. The caption applies only to the first
+document of the entire send.
 
 ## Photos
 

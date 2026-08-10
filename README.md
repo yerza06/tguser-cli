@@ -64,8 +64,11 @@ tguser send "Привет" work
 tguser sendphoto a.png b.png --to work --caption "Фотографии"
 tguser sendphoto a.png b.png work "Фотографии"
 
-# Документы / аудио / видео / голосовое / видео-кружок / стикер
+# Документы (несколько можно сгруппировать через -G/--group)
 tguser sendfile report.pdf --to work --caption "Отчёт"
+tguser sendfile part1.pdf part2.pdf --to work --group
+
+# Аудио / видео / голосовое / видео-кружок / стикер
 tguser sendaudio track.mp3 --to me
 tguser sendvideo clip.mp4 me "Клип"
 tguser sendvoice voice.ogg --to me
