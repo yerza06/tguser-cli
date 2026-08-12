@@ -65,7 +65,7 @@ prepared description of the tool (when to use it, the commands, the pitfalls) th
 by itself as soon as a task involves Telegram.
 
 ```bash
-npx skills add yerza06/tguser-cli
+npx skills add https://github.com/yerza06/tguser-cli --skills tguser
 ```
 
 The installer asks which agents to set it up for and copies the skill into their skill directory:

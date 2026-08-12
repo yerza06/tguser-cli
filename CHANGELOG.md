@@ -17,8 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Agent Skill** in `skills/tguser/` following the open
   [Agent Skills](https://agentskills.io/specification) specification, so AI agents (Claude Code,
   Codex CLI, Cursor, OpenCode, OpenClaw, Cline, Zed, Warp and others) can be taught the tool with
-  a single `npx skills add yerza06/tguser-cli`. `SKILL.md` holds the short instructions — install
-  check, the interactive-login gate, targets, the send commands, output and exit codes — and
+  a single `npx skills add https://github.com/yerza06/tguser-cli --skills tguser`. `SKILL.md` holds
+  the short instructions — install check, the interactive-login gate, targets, the send commands,
+  output and exit codes — and
   `references/reference.md` the full flag tables, parsing rules, configuration and troubleshooting.
 - `skills.sh.json` describing how the repository page is grouped on skills.sh.
 - `LICENSE` (MIT) and matching `license`/`license-files` metadata in `pyproject.toml`; the project

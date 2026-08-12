@@ -133,7 +133,7 @@ tguser sendcontact +77001234567 Иван Петров work
 как только задача касается Telegram. Установка одной командой:
 
 ```bash
-npx skills add yerza06/tguser-cli
+npx skills add https://github.com/yerza06/tguser-cli --skills tguser
 ```
 
 Установщик спросит, для каких агентов настроить skill, и положит его в нужный каталог
