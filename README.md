@@ -14,9 +14,34 @@ Pydantic-Settings · SQLAlchemy 2.0 (async) + aiosqlite.
 
 ## Установка
 
+Прямо из GitHub, клонировать репозиторий не нужно:
+
 ```bash
-uv sync
+uv tool install git+https://github.com/yerza06/tguser-cli.git
 ```
+
+Если репозиторий уже склонирован (или вы хотите поправить код):
+
+```bash
+git clone https://github.com/yerza06/tguser-cli.git
+cd tguser-cli
+uv tool install .
+```
+
+Команда собирает пакет, создаёт для него изолированное окружение в
+`~/.local/share/uv/tools/tguser/` и кладёт исполняемый файл в `~/.local/bin/tguser`. После этого
+`tguser` вызывается **из любой директории** — без `uv run` и без перехода в корень репозитория.
+Это то, что нужно ИИ-агентам: их рабочий каталог заранее неизвестен.
+
+```bash
+uv tool install git+https://github.com/yerza06/tguser-cli.git --force   # обновить до свежей версии
+uv tool install . --force    # переустановить после изменений в коде (из клона)
+uv tool install -e .         # editable-режим: правки применяются сразу
+uv tool uninstall tguser     # удалить
+```
+
+Для разработки самого инструмента достаточно `uv sync` — тогда запуск идёт через
+`uv run tguser …` из корня проекта. Подробности — в [docs/ru/01-installation.md](docs/ru/01-installation.md).
 
 ## Авторизация
 
@@ -24,13 +49,20 @@ uv sync
 затем войдите:
 
 ```bash
-uv run tguser login            # спросит api_id/api_hash (если не заданы), телефон и код
-uv run tguser whoami           # показать текущий аккаунт
-uv run tguser logout           # выйти и удалить сессию
+tguser login            # спросит api_id/api_hash (если не заданы), телефон и код
+tguser whoami           # показать текущий аккаунт
+tguser logout           # выйти и удалить сессию
 ```
 
 Учётные данные сохраняются в `~/.config/tguser/.env`, сессия — в `~/.config/tguser/tguser.session`,
 база чатов — в `~/.config/tguser/tguser.db`.
+
+> ⚠️ **Не удаляйте `~/.config/tguser/tguser.session` и `~/.config/tguser/tguser.db`.**
+> Это рабочее состояние инструмента: авторизация в Telegram и все сохранённые имена чатов.
+> Восстановить их автоматически нельзя — после удаления придётся заново проходить `tguser login`
+> и заново добавлять все alias вручную. Чтобы выйти из аккаунта, используйте `tguser logout`,
+> а не удаление файла. Подробнее — в
+> [docs/ru/03-configuration.md](docs/ru/03-configuration.md#-файлы-tgusersession-и-tguserdb-нельзя-удалять).
 
 Можно задать переменные окружения вручную (см. `.env.example`):
 

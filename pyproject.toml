@@ -15,6 +15,10 @@ dependencies = [
     "aiosqlite>=0.20.0",
 ]
 
+[project.urls]
+Homepage = "https://github.com/yerza06/tguser-cli"
+Repository = "https://github.com/yerza06/tguser-cli.git"
+
 [project.scripts]
 tguser = "tguser.cli:main"
 
