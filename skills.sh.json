@@ -1,0 +1,10 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "groupings": [
+    {
+      "title": "Telegram",
+      "description": "Send Telegram messages, files and media as a user account (MTProto, not a bot), and manage saved chat aliases.",
+      "skills": ["tguser"]
+    }
+  ]
+}

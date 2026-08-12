@@ -4,6 +4,8 @@ version = "0.1.0"
 description = "CLI для отправки сообщений в Telegram от имени пользователя (MTProto) для ИИ-агентов"
 readme = "README.md"
 requires-python = ">=3.13"
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{ name = "Yernaz Kengesbekov" }]
 dependencies = [
     "kurigram>=2.2.0",

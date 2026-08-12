@@ -58,5 +58,31 @@ tguser sendphoto chart.png --to me
 
 Полный список команд и синтаксис — в [05. Отправка сообщений](05-sending.md).
 
-> 🚧 Отдельные **skills** для конкретных агентов (готовые описания инструмента) будут добавлены
-> позже.
+## Готовый skill
+
+Чтобы не объяснять агенту устройство `tguser` каждый раз, установите готовый **Agent Skill** —
+подготовленное описание инструмента (когда его применять, какие команды, где подводные камни),
+которое агент подгружает сам, как только задача касается Telegram.
+
+```bash
+npx skills add yerza06/tguser-cli
+```
+
+Установщик спросит, для каких агентов настроить skill, и скопирует его в их каталог:
+
+| Агент | Куда попадёт skill |
+|-------|--------------------|
+| Claude Code | `~/.claude/skills/tguser/` |
+| Codex CLI | `~/.codex/skills/tguser/` |
+| Cursor | `~/.cursor/skills/tguser/` |
+| OpenCode | `~/.config/opencode/skills/tguser/` |
+| OpenClaw | `~/.openclaw/skills/tguser/` |
+| Cline, Zed, Warp и другие | `~/.agents/skills/tguser/` |
+
+Skill написан по открытой спецификации [Agent Skills](https://agentskills.io/specification),
+поэтому работает в любом агенте с её поддержкой — список выше не полный. Исходник лежит в этом
+репозитории в [`skills/tguser/`](../../skills/tguser/SKILL.md): `SKILL.md` — краткая инструкция,
+`references/reference.md` — полные таблицы флагов и разбор ошибок.
+
+Skill по-прежнему требует, чтобы человек один раз выполнил `tguser login`: войти сам он не может
+и прямо запрещает агенту это пытаться.

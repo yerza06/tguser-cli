@@ -15,7 +15,7 @@ identifiers are stored locally in SQLite (similar to `git remote`).
 | [03. Configuration](03-configuration.md) | `TGUSER_*` variables, file locations |
 | [04. Chat Management](04-chat-management.md) | Named chat aliases (`chat add/list/…`) |
 | [05. Sending Messages](05-sending.md) | Text, files, photos, videos, audio, contacts, and more |
-| [06. AI Agent Integration](06-ai-agents.md) | Calling `tguser` globally, exit codes, typical commands |
+| [06. AI Agent Integration](06-ai-agents.md) | Calling `tguser` globally, exit codes, the ready-made Agent Skill |
 | [07. Troubleshooting](07-troubleshooting.md) | Common errors and how to fix them |
 | [08. Chat Discovery](08-discovery.md) | How to find a chat's ID (`dialogs`, `resolve`) |
 

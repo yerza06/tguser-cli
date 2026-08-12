@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Agent Skill** in `skills/tguser/` following the open
+  [Agent Skills](https://agentskills.io/specification) specification, so AI agents (Claude Code,
+  Codex CLI, Cursor, OpenCode, OpenClaw, Cline, Zed, Warp and others) can be taught the tool with
+  a single `npx skills add yerza06/tguser-cli`. `SKILL.md` holds the short instructions — install
+  check, the interactive-login gate, targets, the send commands, output and exit codes — and
+  `references/reference.md` the full flag tables, parsing rules, configuration and troubleshooting.
+- `skills.sh.json` describing how the repository page is grouped on skills.sh.
+- `LICENSE` (MIT) and matching `license`/`license-files` metadata in `pyproject.toml`; the project
+  was previously unlicensed.
+- Documentation: a "Ready-made skill" section in `06-ai-agents.md` (RU/EN) with the install
+  command and the per-agent skill directories, replacing the placeholder note that skills would
+  come later; the root README gained a skill section and skills.sh/license badges.
 - `sendfile -G/--group` option for sending documents as albums, automatically split into
   groups of up to 10 files.
 - `tguser dialogs` command — lists all dialogs you are a member of (private chats, groups,
