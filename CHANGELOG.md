@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- The root `README.md` is now in **English** and carries a `for-the-badge` shields.io badge row
+  (Python, uv, Telegram/MTProto, MIT, Typer, Rich, Pydantic, SQLAlchemy, SQLite) next to the
+  existing skills.sh badge; the Russian version moved to `README-ru.md` with the same badges, and
+  both files link to each other at the top. `docs/ru/README.md` now points at `README-ru.md`.
+
 - **Agent Skill** in `skills/tguser/` following the open
   [Agent Skills](https://agentskills.io/specification) specification, so AI agents (Claude Code,
   Codex CLI, Cursor, OpenCode, OpenClaw, Cline, Zed, Warp and others) can be taught the tool with

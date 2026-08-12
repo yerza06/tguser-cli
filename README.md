@@ -1,29 +1,41 @@
 # tguser
 
+**English** · [Русский](README-ru.md)
+
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![uv](https://img.shields.io/badge/uv-managed-DE5FE9?style=for-the-badge&logo=uv&logoColor=white)](https://docs.astral.sh/uv/)
+[![Telegram](https://img.shields.io/badge/Telegram-MTProto-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://core.telegram.org/mtproto)
+[![License](https://img.shields.io/badge/License-MIT-3DA639?style=for-the-badge&logo=opensourceinitiative&logoColor=white)](LICENSE)
+
+[![Typer](https://img.shields.io/badge/Typer-CLI-009485?style=for-the-badge&logo=typer&logoColor=white)](https://typer.tiangolo.com/)
+[![Rich](https://img.shields.io/badge/Rich-output-FAE742?style=for-the-badge&logo=rich&logoColor=black)](https://rich.readthedocs.io/)
+[![Pydantic](https://img.shields.io/badge/Pydantic-Settings-E92063?style=for-the-badge&logo=pydantic&logoColor=white)](https://docs.pydantic.dev/)
+[![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0%20async-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)](https://www.sqlalchemy.org/)
+[![SQLite](https://img.shields.io/badge/SQLite-aiosqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
+
 [![skills.sh](https://skills.sh/b/yerza06/tguser-cli)](https://skills.sh/yerza06/tguser-cli)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-CLI-инструмент для отправки сообщений в **Telegram от имени пользователя** (протокол MTProto,
-не бот) — для ИИ-агентов вроде Hermes-Agent, OpenClaw, Claude Code, Codex CLI и т.п.
+A CLI tool for sending messages to **Telegram as a user account** (MTProto protocol, not a bot) —
+built for AI agents such as Hermes-Agent, OpenClaw, Claude Code, Codex CLI and the like.
 
-Агент может писать в личные чаты, группы и каналы как обычный человек, а именованные
-идентификаторы чатов хранятся локально в SQLite (по аналогии с `git remote`).
+An agent can write to private chats, groups and channels like a regular person, while named chat
+identifiers are stored locally in SQLite (similar to `git remote`).
 
-## Стек
+## Stack
 
 Python 3.13 · [uv](https://docs.astral.sh/uv/) · [Kurigram](https://github.com/KurimuzonAkuma/pyrogram)
-(форк Pyrogram) · [Typer](https://typer.tiangolo.com/) + [Rich](https://rich.readthedocs.io/) ·
+(a Pyrogram fork) · [Typer](https://typer.tiangolo.com/) + [Rich](https://rich.readthedocs.io/) ·
 Pydantic-Settings · SQLAlchemy 2.0 (async) + aiosqlite.
 
-## Установка
+## Installation
 
-Прямо из GitHub, клонировать репозиторий не нужно:
+Straight from GitHub — no need to clone the repository:
 
 ```bash
 uv tool install git+https://github.com/yerza06/tguser-cli.git
 ```
 
-Если репозиторий уже склонирован (или вы хотите поправить код):
+If you already have a clone (or want to change the code):
 
 ```bash
 git clone https://github.com/yerza06/tguser-cli.git
@@ -31,127 +43,128 @@ cd tguser-cli
 uv tool install .
 ```
 
-Команда собирает пакет, создаёт для него изолированное окружение в
-`~/.local/share/uv/tools/tguser/` и кладёт исполняемый файл в `~/.local/bin/tguser`. После этого
-`tguser` вызывается **из любой директории** — без `uv run` и без перехода в корень репозитория.
-Это то, что нужно ИИ-агентам: их рабочий каталог заранее неизвестен.
+The command builds the package, creates an isolated environment for it in
+`~/.local/share/uv/tools/tguser/` and puts the executable into `~/.local/bin/tguser`. After that
+`tguser` runs **from any directory** — no `uv run`, no need to be in the repository root. That is
+exactly what AI agents need: their working directory is not known in advance.
 
 ```bash
-uv tool install git+https://github.com/yerza06/tguser-cli.git --force   # обновить до свежей версии
-uv tool install . --force    # переустановить после изменений в коде (из клона)
-uv tool install -e .         # editable-режим: правки применяются сразу
-uv tool uninstall tguser     # удалить
+uv tool install git+https://github.com/yerza06/tguser-cli.git --force   # update to the latest version
+uv tool install . --force    # reinstall after code changes (from a clone)
+uv tool install -e .         # editable mode: edits apply immediately
+uv tool uninstall tguser     # remove
 ```
 
-Для разработки самого инструмента достаточно `uv sync` — тогда запуск идёт через
-`uv run tguser …` из корня проекта. Подробности — в [docs/ru/01-installation.md](docs/ru/01-installation.md).
+For developing the tool itself `uv sync` is enough — then you run it as `uv run tguser …` from the
+project root. Details: [docs/en/01-installation.md](docs/en/01-installation.md).
 
-## Авторизация
+## Authentication
 
-Получите `api_id` и `api_hash` на <https://my.telegram.org> (раздел *API development tools*),
-затем войдите:
+Get your `api_id` and `api_hash` at <https://my.telegram.org> (the *API development tools* section),
+then sign in:
 
 ```bash
-tguser login            # спросит api_id/api_hash (если не заданы), телефон и код
-tguser whoami           # показать текущий аккаунт
-tguser logout           # выйти и удалить сессию
+tguser login            # asks for api_id/api_hash (if unset), phone number and code
+tguser whoami           # show the current account
+tguser logout           # sign out and delete the session
 ```
 
-Учётные данные сохраняются в `~/.config/tguser/.env`, сессия — в `~/.config/tguser/tguser.session`,
-база чатов — в `~/.config/tguser/tguser.db`.
+Credentials are stored in `~/.config/tguser/.env`, the session in `~/.config/tguser/tguser.session`,
+and the chat database in `~/.config/tguser/tguser.db`.
 
-> ⚠️ **Не удаляйте `~/.config/tguser/tguser.session` и `~/.config/tguser/tguser.db`.**
-> Это рабочее состояние инструмента: авторизация в Telegram и все сохранённые имена чатов.
-> Восстановить их автоматически нельзя — после удаления придётся заново проходить `tguser login`
-> и заново добавлять все alias вручную. Чтобы выйти из аккаунта, используйте `tguser logout`,
-> а не удаление файла. Подробнее — в
-> [docs/ru/03-configuration.md](docs/ru/03-configuration.md#-файлы-tgusersession-и-tguserdb-нельзя-удалять).
+> ⚠️ **Never delete `~/.config/tguser/tguser.session` or `~/.config/tguser/tguser.db`.**
+> They are the tool's working state: your Telegram authorization and every saved chat name.
+> They cannot be restored automatically — once deleted you have to go through `tguser login` again
+> and re-add every alias by hand. To sign out, use `tguser logout` rather than deleting the file.
+> More details in
+> [docs/en/03-configuration.md](docs/en/03-configuration.md#-never-delete-tgusersession-or-tguserdb).
 
-Можно задать переменные окружения вручную (см. `.env.example`):
+You can also set the environment variables manually (see `.env.example`):
 
 ```bash
 export TGUSER_API_ID=1234567
 export TGUSER_API_HASH=0123456789abcdef0123456789abcdef
 ```
 
-## Управление чатами
+## Chat management
 
 ```bash
-tguser chat add work -1001234567890     # добавить alias
-tguser chat list                        # таблица всех чатов (или просто `tguser chat`)
-tguser chat get-id work                 # вывести ID
-tguser chat replace-id work -100999     # заменить ID
-tguser chat rename work team            # переименовать
-tguser chat remove team                 # удалить
+tguser chat add work -1001234567890     # add an alias
+tguser chat list                        # table of all chats (or just `tguser chat`)
+tguser chat get-id work                 # print the ID
+tguser chat replace-id work -100999     # replace the ID
+tguser chat rename work team            # rename
+tguser chat remove team                 # delete
 ```
 
-## Отправка
+## Sending
 
-Цель (`--to`) — это **имя сохранённого чата**, числовой ID, `@username` или `me` (Избранное).
-Все медиа-команды поддерживают два синтаксиса — флаги и позиционные аргументы:
+The target (`--to`) is a **saved chat name**, a numeric ID, an `@username`, or `me` (Saved Messages).
+All media commands support two syntaxes — flags and positional arguments:
 
 ```bash
-# Текст
-tguser send "Привет" --to work
-tguser send "Привет" work
+# Text
+tguser send "Hello" --to work
+tguser send "Hello" work
 
-# Фото (несколько — альбомом), с подписью
-tguser sendphoto a.png b.png --to work --caption "Фотографии"
-tguser sendphoto a.png b.png work "Фотографии"
+# Photos (several are sent as an album), with a caption
+tguser sendphoto a.png b.png --to work --caption "Photos"
+tguser sendphoto a.png b.png work "Photos"
 
-# Документы (несколько можно сгруппировать через -G/--group)
-tguser sendfile report.pdf --to work --caption "Отчёт"
+# Documents (several can be grouped with -G/--group)
+tguser sendfile report.pdf --to work --caption "Report"
 tguser sendfile part1.pdf part2.pdf --to work --group
 
-# Аудио / видео / голосовое / видео-кружок / стикер
+# Audio / video / voice / video note / sticker
 tguser sendaudio track.mp3 --to me
-tguser sendvideo clip.mp4 me "Клип"
+tguser sendvideo clip.mp4 me "Clip"
 tguser sendvoice voice.ogg --to me
 tguser sendvideonote note.mp4 --to me
 tguser sendsticker sticker.webp --to me
 
-# Контакт
-tguser sendcontact --phone +77001234567 --first-name Иван --last-name Петров --to work
-tguser sendcontact +77001234567 Иван Петров work
+# Contact
+tguser sendcontact --phone +77001234567 --first-name John --last-name Smith --to work
+tguser sendcontact +77001234567 John Smith work
 ```
 
-## Skill для ИИ-агентов
+## Skill for AI agents
 
-В репозитории лежит готовый **Agent Skill** — описание инструмента, которое агент подгружает сам,
-как только задача касается Telegram. Установка одной командой:
+The repository ships a ready-made **Agent Skill** — a description of the tool that an agent loads by
+itself as soon as a task involves Telegram. One command to install:
 
 ```bash
 npx skills add yerza06/tguser-cli
 ```
 
-Установщик спросит, для каких агентов настроить skill, и положит его в нужный каталог
-(`~/.claude/skills/` для Claude Code, `~/.codex/skills/` для Codex CLI, `~/.agents/skills/` для
-Cline/Zed/Warp и т.д.). Skill написан по открытой спецификации
-[Agent Skills](https://agentskills.io/specification), поэтому работает в любом агенте с её
-поддержкой.
+The installer asks which agents to set the skill up for and puts it into the right directory
+(`~/.claude/skills/` for Claude Code, `~/.codex/skills/` for Codex CLI, `~/.agents/skills/` for
+Cline/Zed/Warp and so on). The skill follows the open
+[Agent Skills](https://agentskills.io/specification) specification, so it works in any agent that
+supports it.
 
-Исходник — [`skills/tguser/`](skills/tguser/SKILL.md), подробности —
-[docs/ru/06-ai-agents.md](docs/ru/06-ai-agents.md#готовый-skill).
+Source: [`skills/tguser/`](skills/tguser/SKILL.md); details in
+[docs/en/06-ai-agents.md](docs/en/06-ai-agents.md#ready-made-skill).
 
-> Skill не умеет входить в аккаунт: `tguser login` один раз выполняет человек.
+> The skill cannot sign in to an account: `tguser login` is run once by a human.
 
-## Структура
+## Layout
 
 ```
 src/tguser/
-├── cli.py            # корневое Typer-приложение
+├── cli.py            # root Typer application
 ├── config.py         # Pydantic-Settings
-├── client.py         # клиент Kurigram + run_async
-├── console.py        # Rich-хелперы вывода
-├── resolver.py       # alias из БД → chat_id
-├── db/               # модели и CRUD (SQLAlchemy async)
+├── client.py         # Kurigram client + run_async
+├── console.py        # Rich output helpers
+├── resolver.py       # alias from the DB → chat_id
+├── db/               # models and CRUD (SQLAlchemy async)
 └── commands/         # auth / chat / send
 
 skills/tguser/        # Agent Skill (skills.sh)
-├── SKILL.md          # краткая инструкция + frontmatter
-└── references/       # полные таблицы флагов и troubleshooting
+├── SKILL.md          # short instructions + frontmatter
+└── references/       # full flag tables and troubleshooting
 ```
 
-## Планы
+## Plans
 
-После рабочего прототипа на Python — возможный порт CLI на Rust (Typer → clap, Kurigram → grammers/tdlib).
+Once the Python prototype is solid — a possible port of the CLI to Rust (Typer → clap,
+Kurigram → grammers/tdlib).
