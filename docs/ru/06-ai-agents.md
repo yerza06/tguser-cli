@@ -65,7 +65,7 @@ tguser sendphoto chart.png --to me
 которое агент подгружает сам, как только задача касается Telegram.
 
 ```bash
-npx skills add yerza06/tguser-cli
+npx skills add https://github.com/yerza06/tguser-cli --skills tguser
 ```
 
 Установщик спросит, для каких агентов настроить skill, и скопирует его в их каталог:

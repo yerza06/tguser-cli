@@ -111,8 +111,9 @@ single) without touching Kurigram.
 ## Agent skill (`skills/tguser/`)
 
 `skills/tguser/SKILL.md` + `references/reference.md` are a **published artifact**, not internal
-notes: users install them into their agent with `npx skills add yerza06/tguser-cli`, and skills.sh
-serves them from the repo. Consequences:
+notes: users install them into their agent with
+`npx skills add https://github.com/yerza06/tguser-cli --skills tguser`, and skills.sh serves them
+from the repo. Consequences:
 
 - `name: tguser` in the frontmatter must keep matching the directory name (Agent Skills spec).
   Keep `SKILL.md` under ~500 lines; detail belongs in `references/`.

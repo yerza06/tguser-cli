@@ -133,7 +133,7 @@ The repository ships a ready-made **Agent Skill** — a description of the tool 
 itself as soon as a task involves Telegram. One command to install:
 
 ```bash
-npx skills add yerza06/tguser-cli
+npx skills add https://github.com/yerza06/tguser-cli --skills tguser
 ```
 
 The installer asks which agents to set the skill up for and puts it into the right directory
