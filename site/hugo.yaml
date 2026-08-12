@@ -1,0 +1,79 @@
+baseURL: "https://yerza06.github.io/tguser-cli/"
+title: "tguser"
+
+enableRobotsTXT: true
+enableInlineShortcodes: true
+
+defaultContentLanguage: en
+defaultContentLanguageInSubdir: false
+languages:
+  en:
+    label: "English"
+    locale: en-US
+    weight: 1
+    title: "tguser"
+  ru:
+    label: "Русский"
+    locale: ru-RU
+    weight: 2
+    title: "tguser"
+
+module:
+  hugoVersion:
+    extended: true
+    min: "0.146.0"
+  imports:
+    - path: github.com/imfing/hextra
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+
+menu:
+  main:
+    - identifier: documentation
+      pageRef: /docs
+      weight: 1
+    - identifier: github
+      url: "https://github.com/yerza06/tguser-cli"
+      weight: 2
+      params:
+        icon: github
+    - name: Search
+      weight: 3
+      params:
+        type: search
+
+params:
+  description: "Send Telegram messages as a user account (MTProto, not a bot) — a CLI built for AI agents."
+
+  navbar:
+    displayTitle: true
+    displayLogo: false
+
+  footer:
+    enable: true
+    displayCopyright: true
+    displayPoweredBy: false
+
+  theme:
+    default: system
+    displayToggle: true
+
+  search:
+    enable: true
+    type: flexsearch
+    flexsearch:
+      index: content
+
+  editURL:
+    enable: true
+    base: "https://github.com/yerza06/tguser-cli/edit/main/site/content"
+
+  highlight:
+    copy:
+      enable: true
+      display: hover

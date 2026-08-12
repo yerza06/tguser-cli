@@ -1,0 +1,7 @@
+# Labels for menu entries declared by `identifier` in hugo.yaml.
+documentation: Documentation
+github: GitHub
+
+# Overrides Hextra's own default ("© 2026 Hextra Project."). The year is literal here — Hugo's
+# i18n strings cannot compute it — so bump it when the year rolls over.
+copyright: "© 2026 tguser · [MIT License](https://github.com/yerza06/tguser-cli/blob/main/LICENSE)"

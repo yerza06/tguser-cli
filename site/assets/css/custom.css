@@ -1,0 +1,26 @@
+/*
+  Project overrides on top of Hextra.
+
+  Hextra derives its whole primary ramp (--color-primary-50 … -900) from three HSL parts, so
+  re-pointing the hue is enough to move the theme onto Telegram blue (#26A5E4 ≈ hsl(200 78% 52%)).
+  Light mode sits darker than the brand colour so button text keeps its contrast on white;
+  dark mode sits lighter for the same reason.
+*/
+
+:root {
+  --primary-hue: 200deg;
+  --primary-saturation: 80%;
+  --primary-lightness: 45%;
+}
+
+.dark {
+  --primary-hue: 200deg;
+  --primary-saturation: 85%;
+  --primary-lightness: 58%;
+}
+
+/* The hero code block is the first thing a CLI user reads — give it room to breathe. */
+.hextra-home-content pre,
+main > .content > .highlight pre {
+  line-height: 1.7;
+}

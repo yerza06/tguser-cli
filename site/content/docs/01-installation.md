@@ -1,4 +1,8 @@
-# 01. Installation
+---
+title: Installation
+slug: installation
+weight: 1
+---
 
 ## Requirements
 

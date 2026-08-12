@@ -1,4 +1,8 @@
-# 06. AI Agent Integration
+---
+title: AI Agent Integration
+slug: ai-agents
+weight: 6
+---
 
 `tguser` was built for AI agents (Hermes-Agent, OpenClaw, Claude Code, Codex CLI, etc.) from the
 start: the agent runs a plain shell command and a Telegram message goes out from your user account.
@@ -81,7 +85,7 @@ The installer asks which agents to set it up for and copies the skill into their
 
 The skill follows the open [Agent Skills](https://agentskills.io/specification) specification, so
 it works in any agent that supports the standard — the list above is not exhaustive. The source
-lives in this repository at [`skills/tguser/`](../../skills/tguser/SKILL.md): `SKILL.md` holds the
+lives in this repository at [`skills/tguser/`](https://github.com/yerza06/tguser-cli/blob/main/skills/tguser/SKILL.md): `SKILL.md` holds the
 short instructions, `references/reference.md` the full flag tables and troubleshooting.
 
 The skill still needs a human to run `tguser login` once — it cannot sign in on its own, and it

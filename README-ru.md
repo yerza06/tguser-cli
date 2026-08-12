@@ -2,6 +2,8 @@
 
 [English](README.md) · **Русский**
 
+📖 **[Сайт документации](https://yerza06.github.io/tguser-cli/ru/)**
+
 [![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![uv](https://img.shields.io/badge/uv-managed-DE5FE9?style=for-the-badge&logo=uv&logoColor=white)](https://docs.astral.sh/uv/)
 [![Telegram](https://img.shields.io/badge/Telegram-MTProto-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://core.telegram.org/mtproto)
@@ -13,7 +15,9 @@
 [![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0%20async-D71F00?style=for-the-badge&logo=sqlalchemy&logoColor=white)](https://www.sqlalchemy.org/)
 [![SQLite](https://img.shields.io/badge/SQLite-aiosqlite-003B57?style=for-the-badge&logo=sqlite&logoColor=white)](https://www.sqlite.org/)
 
-[![skills.sh](https://skills.sh/b/yerza06/tguser-cli)](https://skills.sh/yerza06/tguser-cli)
+[![skills.sh](https://www.skills.sh/b/yerza06/tguser-cli?style=for-the-badge&logo=vercel&logoColor=%23FFFFFF&label=skills.sh&color=%23000000)](https://www.skills.sh/yerza06/tguser-cli)
+![GitHub watchers](https://img.shields.io/github/watchers/yerza06/tguser-cli?style=for-the-badge&logo=github&labelColor=%23000000&color=%23FFFFFF)
+![GitHub Repo stars](https://img.shields.io/github/stars/yerza06/tguser-cli?style=for-the-badge&logo=github&labelColor=%23000000&color=%23FFFFFF)
 
 CLI-инструмент для отправки сообщений в **Telegram от имени пользователя** (протокол MTProto,
 не бот) — для ИИ-агентов вроде Hermes-Agent, OpenClaw, Claude Code, Codex CLI и т.п.
@@ -56,11 +60,11 @@ uv tool uninstall tguser     # удалить
 ```
 
 Для разработки самого инструмента достаточно `uv sync` — тогда запуск идёт через
-`uv run tguser …` из корня проекта. Подробности — в [docs/ru/01-installation.md](docs/ru/01-installation.md).
+`uv run tguser …` из корня проекта. Подробности — в [Установке](https://yerza06.github.io/tguser-cli/ru/docs/installation/).
 
 ## Авторизация
 
-Получите `api_id` и `api_hash` на <https://my.telegram.org> (раздел *API development tools*),
+Получите `api_id` и `api_hash` на <https://my.telegram.org> (раздел _API development tools_),
 затем войдите:
 
 ```bash
@@ -77,7 +81,7 @@ tguser logout           # выйти и удалить сессию
 > Восстановить их автоматически нельзя — после удаления придётся заново проходить `tguser login`
 > и заново добавлять все alias вручную. Чтобы выйти из аккаунта, используйте `tguser logout`,
 > а не удаление файла. Подробнее — в
-> [docs/ru/03-configuration.md](docs/ru/03-configuration.md#-файлы-tgusersession-и-tguserdb-нельзя-удалять).
+> [Конфигурация](https://yerza06.github.io/tguser-cli/ru/docs/configuration/#-файлы-tgusersession-и-tguserdb-нельзя-удалять).
 
 Можно задать переменные окружения вручную (см. `.env.example`):
 
@@ -143,7 +147,7 @@ Cline/Zed/Warp и т.д.). Skill написан по открытой специ
 поддержкой.
 
 Исходник — [`skills/tguser/`](skills/tguser/SKILL.md), подробности —
-[docs/ru/06-ai-agents.md](docs/ru/06-ai-agents.md#готовый-skill).
+[Интеграция с ИИ-агентами](https://yerza06.github.io/tguser-cli/ru/docs/ai-agents/#готовый-skill).
 
 > Skill не умеет входить в аккаунт: `tguser login` один раз выполняет человек.
 
@@ -162,6 +166,10 @@ src/tguser/
 skills/tguser/        # Agent Skill (skills.sh)
 ├── SKILL.md          # краткая инструкция + frontmatter
 └── references/       # полные таблицы флагов и troubleshooting
+
+site/                 # сайт документации (Hugo + Hextra → GitHub Pages)
+├── hugo.yaml
+└── content/          # лендинг и документация, английская и русская
 ```
 
 ## Планы

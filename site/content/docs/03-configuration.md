@@ -1,4 +1,8 @@
-# 03. Configuration
+---
+title: Configuration
+slug: configuration
+weight: 3
+---
 
 `tguser` is configured through environment variables (Pydantic-Settings) with the `TGUSER_` prefix.
 

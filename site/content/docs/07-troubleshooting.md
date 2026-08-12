@@ -1,4 +1,8 @@
-# 07. Troubleshooting
+---
+title: Troubleshooting
+slug: troubleshooting
+weight: 7
+---
 
 ## `tguser: command not found`
 

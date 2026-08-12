@@ -1,4 +1,10 @@
-# tguser Documentation (English)
+---
+title: Documentation
+linkTitle: Documentation
+weight: 1
+sidebar:
+  open: true
+---
 
 `tguser` is a CLI tool for sending messages to **Telegram as a user** (MTProto protocol, not a bot).
 It lets you write to private chats, groups, and channels like a regular person, while named chat
@@ -36,4 +42,4 @@ needed. For installing from a clone and the development workflow (`uv sync` + `u
 > your Telegram authorization and your saved chats. What these files are, why they matter, and what
 > happens if you delete them: [03. Configuration](03-configuration.md#-never-delete-tgusersession-or-tguserdb).
 
-> See also the short overview in the root [README.md](../../README.md).
+> See also the short overview in the root [README.md](https://github.com/yerza06/tguser-cli/blob/main/README.md).

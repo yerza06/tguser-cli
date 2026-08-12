@@ -1,4 +1,8 @@
-# 05. Sending Messages
+---
+title: Sending Messages
+slug: sending
+weight: 5
+---
 
 `tguser` can send text and various media types from your account. Before sending, you must
 [sign in](02-authentication.md).

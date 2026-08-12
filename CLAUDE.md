@@ -118,13 +118,34 @@ from the repo. Consequences:
 - `name: tguser` in the frontmatter must keep matching the directory name (Agent Skills spec).
   Keep `SKILL.md` under ~500 lines; detail belongs in `references/`.
 - The skill documents the *installed* CLI, so it must never reference `uv run` or a local path.
-- Any change to a command, flag, or output shape means updating the skill **alongside** `docs/en/`
-  and `docs/ru/` — an out-of-date skill silently misleads every agent that installed it.
+- Any change to a command, flag, or output shape means updating the skill **alongside** the docs in
+  `site/content/docs/` — an out-of-date skill silently misleads every agent that installed it.
 - `metadata.version` in the frontmatter tracks the `pyproject.toml` version.
+
+## Documentation site (`site/`)
+
+Hugo + the [Hextra](https://github.com/imfing/hextra) theme, published to GitHub Pages at
+<https://yerza06.github.io/tguser-cli/> by `.github/workflows/pages.yml` on every push to `main`.
+Hugo's project root is `site/`, so build it as `hugo -s site` (or `hugo server -s site`). The theme
+is a Hugo Module, which means the Go toolchain is required — there is no `themes/` directory.
+
+- `site/content/_index.md` (+ `_index.ru.md`) is the landing page: `layout: hextra-home`, built
+  entirely from Hextra shortcodes (`hextra/hero-headline`, `feature-grid`, …). No Go templates.
+- Docs pages keep their numbered filenames (`03-configuration.md`) but publish under a clean `slug`
+  (`/docs/configuration/`). **Do not rename the files**: the link render hook resolves the existing
+  relative cross-links (`[03. Configuration](03-configuration.md#anchor)`) by source path, and
+  renaming would silently break about twenty of them.
+- `site/layouts/_markup/render-link.html` is a project override carrying Hextra's `main`-branch link
+  hook, because the released v0.12.3 only resolves links starting with `/`. Delete it once a Hextra
+  release ships the same logic.
+- Every docs page needs `title`, `slug` and `weight` front matter — Hextra renders `<h1>{{ .Title }}</h1>`
+  itself, so pages must not carry their own top-level `#` heading.
 
 ## Conventions
 
 - Code, comments and docstrings are in **English**; the README, CHANGELOG and docs are bilingual.
-- `docs/ru/` and `docs/en/` are parallel trees — changes to one need the matching change in the other.
+- Documentation lives in `site/content/docs/`, translated by filename suffix: `05-sending.md` is the
+  English page and `05-sending.ru.md` its Russian twin. They are parallel — changes to one need the
+  matching change in the other.
 - User-visible changes go in `CHANGELOG.md` under `[Unreleased]` (Keep a Changelog format).
 - Git flow: `feat/*` branches → `dev` → `main`; Conventional Commits.
