@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Documentation website** at <https://yerza06.github.io/tguser-cli/> — a landing page plus the
+  full English and Russian documentation, with full-text search, a language switcher and a dark
+  theme. Built with Hugo and the Hextra theme from `site/`, and deployed to GitHub Pages by
+  `.github/workflows/pages.yml` on every push to `main`.
+
 - The root `README.md` is now in **English** and carries a `for-the-badge` shields.io badge row
   (Python, uv, Telegram/MTProto, MIT, Typer, Rich, Pydantic, SQLAlchemy, SQLite) next to the
   existing skills.sh badge; the Russian version moved to `README-ru.md` with the same badges, and
@@ -56,6 +61,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **Documentation moved** from `docs/en/` and `docs/ru/` into `site/content/docs/`, where the two
+  languages now sit side by side as `05-sending.md` and `05-sending.ru.md`. The pages are published
+  under clean URLs (`/docs/sending/`); the filenames keep their numeric prefixes so the existing
+  relative cross-links keep resolving. Links to `docs/**` in the READMEs now point at the website.
 - Documentation now recommends installing globally with `uv tool install .` instead of running
   through `uv run` from the repository: `01-installation.md` (RU/EN) explains what the command does
   (isolated environment in `~/.local/share/uv/tools/`, executable in `~/.local/bin/`), how to

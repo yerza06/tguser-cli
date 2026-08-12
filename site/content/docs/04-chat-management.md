@@ -1,4 +1,8 @@
-# 04. Chat Management
+---
+title: Chat Management
+slug: chat-management
+weight: 4
+---
 
 The `chat` command manages **named identifiers** for chats, groups, and channels — similar to
 `git remote`. Instead of specifying a numeric ID like `-1001234567890` every time, you save it

@@ -1,4 +1,8 @@
-# 08. Chat Discovery (how to find an ID)
+---
+title: Chat Discovery
+slug: discovery
+weight: 8
+---
 
 To send a message or save an alias you usually need a chat's identifier. Telegram **does not
 show** the numeric ID (`-100…`) in its interface, so `tguser` helps you find it with two

@@ -1,4 +1,8 @@
-# 06. Интеграция с ИИ-агентами
+---
+title: Интеграция с ИИ-агентами
+slug: ai-agents
+weight: 6
+---
 
 `tguser` изначально создавался как инструмент для ИИ-агентов (Hermes-Agent, OpenClaw, Claude Code,
 Codex CLI и др.): агент вызывает обычную shell-команду и отправляет сообщение в Telegram от имени
@@ -81,7 +85,7 @@ npx skills add https://github.com/yerza06/tguser-cli --skills tguser
 
 Skill написан по открытой спецификации [Agent Skills](https://agentskills.io/specification),
 поэтому работает в любом агенте с её поддержкой — список выше не полный. Исходник лежит в этом
-репозитории в [`skills/tguser/`](../../skills/tguser/SKILL.md): `SKILL.md` — краткая инструкция,
+репозитории в [`skills/tguser/`](https://github.com/yerza06/tguser-cli/blob/main/skills/tguser/SKILL.md): `SKILL.md` — краткая инструкция,
 `references/reference.md` — полные таблицы флагов и разбор ошибок.
 
 Skill по-прежнему требует, чтобы человек один раз выполнил `tguser login`: войти сам он не может

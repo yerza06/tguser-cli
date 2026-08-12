@@ -1,4 +1,8 @@
-# 03. Конфигурация
+---
+title: Конфигурация
+slug: configuration
+weight: 3
+---
 
 `tguser` настраивается через переменные окружения (Pydantic-Settings) с префиксом `TGUSER_`.
 

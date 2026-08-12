@@ -1,4 +1,8 @@
-# 02. Authentication
+---
+title: Authentication
+slug: authentication
+weight: 2
+---
 
 To send messages as a user, you need to sign in to your account once. `tguser` uses MTProto
 via Kurigram, so `api_id` and `api_hash` are required.

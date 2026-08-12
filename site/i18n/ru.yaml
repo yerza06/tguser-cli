@@ -1,0 +1,7 @@
+# Подписи пунктов меню, объявленных через `identifier` в hugo.yaml.
+documentation: Документация
+github: GitHub
+
+# Переопределяет собственную строку Hextra («2026 Проект Hextra.»). Год записан буквально —
+# в i18n-строках Hugo его не вычислить, — так что при смене года его нужно поправить.
+copyright: "© 2026 tguser · [Лицензия MIT](https://github.com/yerza06/tguser-cli/blob/main/LICENSE)"
