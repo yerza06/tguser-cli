@@ -1,5 +1,8 @@
 # tguser
 
+[![skills.sh](https://skills.sh/b/yerza06/tguser-cli)](https://skills.sh/yerza06/tguser-cli)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 CLI-инструмент для отправки сообщений в **Telegram от имени пользователя** (протокол MTProto,
 не бот) — для ИИ-агентов вроде Hermes-Agent, OpenClaw, Claude Code, Codex CLI и т.п.
 
@@ -112,6 +115,26 @@ tguser sendcontact --phone +77001234567 --first-name Иван --last-name Пет
 tguser sendcontact +77001234567 Иван Петров work
 ```
 
+## Skill для ИИ-агентов
+
+В репозитории лежит готовый **Agent Skill** — описание инструмента, которое агент подгружает сам,
+как только задача касается Telegram. Установка одной командой:
+
+```bash
+npx skills add yerza06/tguser-cli
+```
+
+Установщик спросит, для каких агентов настроить skill, и положит его в нужный каталог
+(`~/.claude/skills/` для Claude Code, `~/.codex/skills/` для Codex CLI, `~/.agents/skills/` для
+Cline/Zed/Warp и т.д.). Skill написан по открытой спецификации
+[Agent Skills](https://agentskills.io/specification), поэтому работает в любом агенте с её
+поддержкой.
+
+Исходник — [`skills/tguser/`](skills/tguser/SKILL.md), подробности —
+[docs/ru/06-ai-agents.md](docs/ru/06-ai-agents.md#готовый-skill).
+
+> Skill не умеет входить в аккаунт: `tguser login` один раз выполняет человек.
+
 ## Структура
 
 ```
@@ -123,6 +146,10 @@ src/tguser/
 ├── resolver.py       # alias из БД → chat_id
 ├── db/               # модели и CRUD (SQLAlchemy async)
 └── commands/         # auth / chat / send
+
+skills/tguser/        # Agent Skill (skills.sh)
+├── SKILL.md          # краткая инструкция + frontmatter
+└── references/       # полные таблицы флагов и troubleshooting
 ```
 
 ## Планы

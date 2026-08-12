@@ -108,6 +108,19 @@ pull the `sender` closure out of `dispatch.call_args`, then drive it with a `Mag
 `send_*` methods are `AsyncMock`s. Use this to test send behaviour (batching, captions, album vs
 single) without touching Kurigram.
 
+## Agent skill (`skills/tguser/`)
+
+`skills/tguser/SKILL.md` + `references/reference.md` are a **published artifact**, not internal
+notes: users install them into their agent with `npx skills add yerza06/tguser-cli`, and skills.sh
+serves them from the repo. Consequences:
+
+- `name: tguser` in the frontmatter must keep matching the directory name (Agent Skills spec).
+  Keep `SKILL.md` under ~500 lines; detail belongs in `references/`.
+- The skill documents the *installed* CLI, so it must never reference `uv run` or a local path.
+- Any change to a command, flag, or output shape means updating the skill **alongside** `docs/en/`
+  and `docs/ru/` — an out-of-date skill silently misleads every agent that installed it.
+- `metadata.version` in the frontmatter tracks the `pyproject.toml` version.
+
 ## Conventions
 
 - Code, comments and docstrings are in **English**; the README, CHANGELOG and docs are bilingual.
