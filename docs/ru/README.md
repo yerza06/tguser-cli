@@ -10,7 +10,7 @@
 
 | Раздел | Описание |
 |--------|----------|
-| [01. Установка](01-installation.md) | Требования, глобальная установка через `uv tool install .` |
+| [01. Установка](01-installation.md) | Требования, глобальная установка из GitHub через `uv tool install` |
 | [02. Авторизация](02-authentication.md) | Получение api_id/api_hash, вход, выход, текущий аккаунт |
 | [03. Конфигурация](03-configuration.md) | Переменные `TGUSER_*`, расположение файлов |
 | [04. Управление чатами](04-chat-management.md) | Именованные alias чатов (`chat add/list/…`) |
@@ -22,13 +22,18 @@
 ## Быстрый старт
 
 ```bash
-uv tool install .                      # установить tguser глобально (из корня проекта)
+uv tool install git+https://github.com/yerza06/tguser-cli.git   # установить глобально из GitHub
 tguser login                           # вход в аккаунт
 tguser chat add work -1001234567890    # сохранить чат под именем work
 tguser send "Привет" --to work         # отправить сообщение
 ```
 
-После `uv tool install .` команда `tguser` доступна из любой директории — без `uv run`.
-Подробности и режим разработки (`uv sync` + `uv run`) — в [01. Установка](01-installation.md).
+После `uv tool install` команда `tguser` доступна из любой директории — без `uv run`.
+Установка из клона репозитория и режим разработки (`uv sync` + `uv run`) —
+в [01. Установка](01-installation.md).
+
+> ⚠️ **Не удаляйте файлы `~/.config/tguser/tguser.session` и `~/.config/tguser/tguser.db`** —
+> это авторизация в Telegram и база сохранённых чатов. Что это за файлы, зачем они нужны и что
+> будет, если их удалить, — в [03. Конфигурация](03-configuration.md#-файлы-tgusersession-и-tguserdb-нельзя-удалять).
 
 > См. также краткий обзор в корневом [README.md](../../README.md).

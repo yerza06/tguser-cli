@@ -14,7 +14,17 @@ Pydantic-Settings · SQLAlchemy 2.0 (async) + aiosqlite.
 
 ## Установка
 
+Прямо из GitHub, клонировать репозиторий не нужно:
+
 ```bash
+uv tool install git+https://github.com/yerza06/tguser-cli.git
+```
+
+Если репозиторий уже склонирован (или вы хотите поправить код):
+
+```bash
+git clone https://github.com/yerza06/tguser-cli.git
+cd tguser-cli
 uv tool install .
 ```
 
@@ -24,7 +34,8 @@ uv tool install .
 Это то, что нужно ИИ-агентам: их рабочий каталог заранее неизвестен.
 
 ```bash
-uv tool install . --force    # переустановить после изменений в коде
+uv tool install git+https://github.com/yerza06/tguser-cli.git --force   # обновить до свежей версии
+uv tool install . --force    # переустановить после изменений в коде (из клона)
 uv tool install -e .         # editable-режим: правки применяются сразу
 uv tool uninstall tguser     # удалить
 ```
@@ -45,6 +56,13 @@ tguser logout           # выйти и удалить сессию
 
 Учётные данные сохраняются в `~/.config/tguser/.env`, сессия — в `~/.config/tguser/tguser.session`,
 база чатов — в `~/.config/tguser/tguser.db`.
+
+> ⚠️ **Не удаляйте `~/.config/tguser/tguser.session` и `~/.config/tguser/tguser.db`.**
+> Это рабочее состояние инструмента: авторизация в Telegram и все сохранённые имена чатов.
+> Восстановить их автоматически нельзя — после удаления придётся заново проходить `tguser login`
+> и заново добавлять все alias вручную. Чтобы выйти из аккаунта, используйте `tguser logout`,
+> а не удаление файла. Подробнее — в
+> [docs/ru/03-configuration.md](docs/ru/03-configuration.md#-файлы-tgusersession-и-tguserdb-нельзя-удалять).
 
 Можно задать переменные окружения вручную (см. `.env.example`):
 

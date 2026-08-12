@@ -65,4 +65,11 @@ Ends the session on Telegram's side and removes the local session file
 After signing in, a session file `~/.config/tguser/tguser.session` is created. As long as it
 exists and is valid, you don't need to `login` again — the sending commands work right away.
 
+> ⚠️ **Never delete this file.** It stores your Telegram authorization key; without it every
+> command stops working and you have to go through the interactive `tguser login` again (phone,
+> code, cloud password). To sign out, use `tguser logout` — it properly terminates the session on
+> Telegram's side and removes the file itself. The same applies to the chat database
+> `~/.config/tguser/tguser.db`. Both files are explained in
+> [03. Configuration](03-configuration.md#-never-delete-tgusersession-or-tguserdb).
+
 For more on file locations and variables, see [03. Configuration](03-configuration.md).

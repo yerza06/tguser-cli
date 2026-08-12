@@ -10,7 +10,7 @@ identifiers are stored locally in SQLite (similar to `git remote`).
 
 | Section | Description |
 |---------|-------------|
-| [01. Installation](01-installation.md) | Requirements, installing globally with `uv tool install .` |
+| [01. Installation](01-installation.md) | Requirements, installing globally from GitHub with `uv tool install` |
 | [02. Authentication](02-authentication.md) | Getting api_id/api_hash, login, logout, current account |
 | [03. Configuration](03-configuration.md) | `TGUSER_*` variables, file locations |
 | [04. Chat Management](04-chat-management.md) | Named chat aliases (`chat add/list/…`) |
@@ -22,14 +22,18 @@ identifiers are stored locally in SQLite (similar to `git remote`).
 ## Quick Start
 
 ```bash
-uv tool install .                      # install tguser globally (from the project root)
+uv tool install git+https://github.com/yerza06/tguser-cli.git   # install globally from GitHub
 tguser login                           # sign in to your account
 tguser chat add work -1001234567890    # save a chat under the name "work"
 tguser send "Hello" --to work          # send a message
 ```
 
-After `uv tool install .` the `tguser` command is available from any directory — no `uv run`
-needed. For details and the development workflow (`uv sync` + `uv run`), see
+After `uv tool install` the `tguser` command is available from any directory — no `uv run`
+needed. For installing from a clone and the development workflow (`uv sync` + `uv run`), see
 [01. Installation](01-installation.md).
+
+> ⚠️ **Never delete `~/.config/tguser/tguser.session` or `~/.config/tguser/tguser.db`** — they hold
+> your Telegram authorization and your saved chats. What these files are, why they matter, and what
+> happens if you delete them: [03. Configuration](03-configuration.md#-never-delete-tgusersession-or-tguserdb).
 
 > See also the short overview in the root [README.md](../../README.md).

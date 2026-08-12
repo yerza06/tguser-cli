@@ -6,6 +6,11 @@ under a friendly name (an alias) and use that name in `--to`.
 
 Identifiers are stored in the SQLite database `~/.config/tguser/tguser.db`.
 
+> ⚠️ **Never delete this file.** Deleting it wipes every saved chat name, and commands using
+> `--to <name>` stop working; Telegram does not store your local names, so the address book has to
+> be rebuilt by hand. See
+> [03. Configuration](03-configuration.md#-never-delete-tgusersession-or-tguserdb) for details.
+
 ## Subcommand Overview
 
 | Command | Purpose |

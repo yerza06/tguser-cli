@@ -14,7 +14,7 @@ what a global install gives you.
 So install the tool globally before wiring up any agent:
 
 ```bash
-uv tool install .        # from the tguser project root
+uv tool install git+https://github.com/yerza06/tguser-cli.git
 ```
 
 The command builds the package, creates an isolated environment for it under
@@ -34,6 +34,11 @@ cd /tmp && tguser whoami     # should show the current account from any director
 - **State is global.** Credentials, the session, and the chat database live in `~/.config/tguser/`,
   so the result does not depend on the working directory (see
   [03. Configuration](03-configuration.md)).
+- **Leave the state files alone.** `tguser.session` and `tguser.db` in `~/.config/tguser/` must
+  never be deleted: the first one is your Telegram authorization, the second holds every saved chat
+  name. Deleting them breaks the agent completely and requires a human (another interactive
+  `tguser login`, rebuilding the aliases by hand) — see
+  [03. Configuration](03-configuration.md#-never-delete-tgusersession-or-tguserdb).
 - **Signing in is interactive.** `tguser login` asks for a phone number and a code — a human does
   that once. The agent only sends; no repeated login is needed.
 - **Prefer chat aliases for `--to`.** A human saves the alias once

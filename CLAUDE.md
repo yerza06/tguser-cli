@@ -20,9 +20,11 @@ uv tool install .                                # install globally → ~/.local
 uv tool install . --force                        # reinstall after code changes
 ```
 
-End users (and the AI agents this tool targets) are expected to install globally with
-`uv tool install .` and call plain `tguser` from any directory; `uv run` is the development path
-only. The docs are written for the global install — keep new examples prefix-free.
+End users (and the AI agents this tool targets) are expected to install globally — the documented
+path is `uv tool install git+https://github.com/yerza06/tguser-cli.git` (public repo), with
+`uv tool install .` from a clone as the alternative — and to call plain `tguser` from any
+directory; `uv run` is the development path only. The docs are written for the global install —
+keep new examples prefix-free.
 
 `tests/` is not a package, so dotted paths (`python -m unittest tests.test_sendfile....`) do **not**
 work — always go through `discover -s tests` and narrow with `-k`.
