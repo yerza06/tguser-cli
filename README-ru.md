@@ -71,6 +71,7 @@ uv tool uninstall tguser     # удалить
 tguser login            # спросит api_id/api_hash и телефон (если не заданы), а также код
 tguser whoami           # показать текущий аккаунт
 tguser logout           # выйти и удалить сессию
+tguser version          # версия, путь к конфигурации и наличие сессии
 ```
 
 Учётные данные сохраняются в `~/.config/tguser/.env`, сессия — в `~/.config/tguser/tguser.session`,

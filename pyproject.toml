@@ -1,6 +1,6 @@
 [project]
 name = "tguser"
-version = "0.1.0"
+version = "1.0.1"
 description = "CLI для отправки сообщений в Telegram от имени пользователя (MTProto) для ИИ-агентов"
 readme = "README.md"
 requires-python = ">=3.13"

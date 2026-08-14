@@ -9,6 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`tguser version`** — a new command that prints the tool version together with the environment it
+  runs in: Python and Kurigram versions, the configuration directory, whether a session file and
+  credentials exist, and the active language. It reads only — no network calls, and the
+  configuration directory is not created as a side effect — so it is safe to run before `login` and
+  is the quickest way to describe a setup in a bug report. The existing `--version` / `-V` flag
+  still prints the single parseable line `tguser 0.1.0` and now shares its version string with the
+  command.
+
 - **`TGUSER_PHONE_NUMBER`** — the phone number is now a regular setting alongside `TGUSER_API_ID`
   and `TGUSER_API_HASH`. `tguser login` takes it from `--phone`, then the environment (or
   `~/.config/tguser/.env`), and only asks interactively as a last resort. A number entered at the
@@ -67,6 +75,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **The package version now has a single source of truth** in `[project.version]` of
+  `pyproject.toml`: `src/tguser/__init__.py` no longer hardcodes it but reads it from the installed
+  distribution metadata via `importlib.metadata`. A release is therefore a plain
+  `uv version --bump patch` (plus `metadata.version` in the published `skills/tguser/SKILL.md`,
+  which the Agent Skills spec keeps in the file itself).
 - **Documentation moved** from `docs/en/` and `docs/ru/` into `site/content/docs/`, where the two
   languages now sit side by side as `05-sending.md` and `05-sending.ru.md`. The pages are published
   under clean URLs (`/docs/sending/`); the filenames keep their numeric prefixes so the existing
