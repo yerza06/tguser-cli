@@ -25,7 +25,8 @@ tguser login
 Команда спросит по очереди:
 
 - `api_id` и `api_hash` — если они ещё не заданы (будут сохранены в `~/.config/tguser/.env`);
-- номер телефона в формате `+7…`;
+- номер телефона в формате `+7…` — если не заданы `--phone` или `TGUSER_PHONE_NUMBER`
+  (после успешного входа он тоже сохраняется в `~/.config/tguser/.env`);
 - код подтверждения из Telegram;
 - пароль двухфакторной аутентификации — **только если он включён**.
 
@@ -43,7 +44,16 @@ tguser login --api-id 1234567 --api-hash 0123456789abcdef0123456789abcdef --phon
 |------|----------|
 | `--api-id` | api_id с my.telegram.org |
 | `--api-hash` | api_hash с my.telegram.org |
-| `--phone` | Номер телефона |
+| `--phone` | Номер телефона (запасной вариант — `TGUSER_PHONE_NUMBER`) |
+
+Те же значения можно передать через окружение вместо флагов:
+
+```bash
+export TGUSER_API_ID=1234567
+export TGUSER_API_HASH=0123456789abcdef0123456789abcdef
+export TGUSER_PHONE_NUMBER=+77001234567
+tguser login
+```
 
 Код подтверждения и пароль 2FA всё равно запрашиваются интерактивно.
 

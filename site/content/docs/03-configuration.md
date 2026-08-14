@@ -12,6 +12,7 @@ weight: 3
 |----------|---------|-------------|
 | `TGUSER_API_ID` | — | api_id from my.telegram.org |
 | `TGUSER_API_HASH` | — | api_hash from my.telegram.org |
+| `TGUSER_PHONE_NUMBER` | — | Phone number for `login` (asked interactively if unset) |
 | `TGUSER_CONFIG_DIR` | `~/.config/tguser` | Directory for the session, database, and `.env` |
 | `TGUSER_SESSION_NAME` | `tguser` | Session name (file name `<name>.session`) |
 | `TGUSER_LANG` | `en` | CLI output language: `en` or `ru` |
@@ -40,6 +41,7 @@ Example `.env` (see also `.env.example` in the project root):
 ```dotenv
 TGUSER_API_ID=1234567
 TGUSER_API_HASH=0123456789abcdef0123456789abcdef
+# TGUSER_PHONE_NUMBER=+15551234567
 # TGUSER_CONFIG_DIR=~/.config/tguser
 # TGUSER_SESSION_NAME=tguser
 ```
@@ -50,7 +52,7 @@ All working files live in `TGUSER_CONFIG_DIR` (by default `~/.config/tguser/`):
 
 | File | Purpose |
 |------|---------|
-| `.env` | api_id/api_hash (created by `login`, permissions `0600`) |
+| `.env` | api_id/api_hash/phone number (created by `login`, permissions `0600`) |
 | `tguser.session` | Kurigram session file |
 | `tguser.db` | SQLite database with named chats |
 

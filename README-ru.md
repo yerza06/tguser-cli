@@ -68,7 +68,7 @@ uv tool uninstall tguser     # удалить
 затем войдите:
 
 ```bash
-tguser login            # спросит api_id/api_hash (если не заданы), телефон и код
+tguser login            # спросит api_id/api_hash и телефон (если не заданы), а также код
 tguser whoami           # показать текущий аккаунт
 tguser logout           # выйти и удалить сессию
 ```
@@ -88,6 +88,7 @@ tguser logout           # выйти и удалить сессию
 ```bash
 export TGUSER_API_ID=1234567
 export TGUSER_API_HASH=0123456789abcdef0123456789abcdef
+export TGUSER_PHONE_NUMBER=+79991234567   # необязательно: пропускает промпт телефона в `login`
 ```
 
 ## Управление чатами

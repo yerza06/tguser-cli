@@ -12,7 +12,7 @@ from rich.prompt import Prompt
 from rich.table import Table
 
 from ..client import build_client, run_async
-from ..config import Settings, get_settings, save_credentials
+from ..config import Settings, get_settings, save_credentials, save_phone_number
 from ..console import console, fail, success
 from ..i18n import t
 
@@ -41,7 +41,7 @@ async def _login(settings: Settings, phone: str | None) -> None:
     client = build_client(settings)
     await client.connect()
     try:
-        phone = phone or Prompt.ask(t("auth.prompt_phone"))
+        phone = (phone or settings.phone_number or Prompt.ask(t("auth.prompt_phone"))).strip()
         sent = await client.send_code(phone)
         code = Prompt.ask(t("auth.prompt_code"))
         try:
@@ -53,6 +53,10 @@ async def _login(settings: Settings, phone: str | None) -> None:
         me = await client.get_me()
     finally:
         await client.disconnect()
+
+    # Persist only after a successful sign-in, so a typo never ends up in .env.
+    if phone != settings.phone_number:
+        save_phone_number(settings, phone)
 
     handle = f"@{me.username}" if me.username else "—"
     success(

@@ -68,7 +68,7 @@ Get your `api_id` and `api_hash` at <https://my.telegram.org> (the _API developm
 then sign in:
 
 ```bash
-tguser login            # asks for api_id/api_hash (if unset), phone number and code
+tguser login            # asks for api_id/api_hash and phone number (if unset), and the code
 tguser whoami           # show the current account
 tguser logout           # sign out and delete the session
 ```
@@ -88,6 +88,7 @@ You can also set the environment variables manually (see `.env.example`):
 ```bash
 export TGUSER_API_ID=1234567
 export TGUSER_API_HASH=0123456789abcdef0123456789abcdef
+export TGUSER_PHONE_NUMBER=+15551234567   # optional: skips the phone prompt in `login`
 ```
 
 ## Chat management

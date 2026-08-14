@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **`TGUSER_PHONE_NUMBER`** — the phone number is now a regular setting alongside `TGUSER_API_ID`
+  and `TGUSER_API_HASH`. `tguser login` takes it from `--phone`, then the environment (or
+  `~/.config/tguser/.env`), and only asks interactively as a last resort. A number entered at the
+  prompt is saved to `~/.config/tguser/.env` (mode 600) after a successful sign-in, so repeated
+  logins no longer ask for it.
+
 - **Documentation website** at <https://yerza06.github.io/tguser-cli/> — a landing page plus the
   full English and Russian documentation, with full-text search, a language switcher and a dark
   theme. Built with Hugo and the Hextra theme from `site/`, and deployed to GitHub Pages by
