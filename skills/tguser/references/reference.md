@@ -6,6 +6,7 @@ aren't enough — for full flag tables, parsing rules, configuration, or trouble
 ## Table of contents
 
 - [Global options](#global-options)
+- [Version & environment](#version--environment)
 - [Authentication commands](#authentication-commands)
 - [Configuration & file locations](#configuration--file-locations)
 - [Separate profiles](#separate-profiles)
@@ -24,6 +25,20 @@ aren't enough — for full flag tables, parsing rules, configuration, or trouble
 | `--install-completion` | Install shell completion |
 | `--show-completion` | Print the completion script |
 | `--help` | Help for any command |
+
+## Version & environment
+
+```bash
+tguser version      # panel: version, Python, Kurigram, config path, session, credentials, language
+tguser --version    # single line: `tguser 1.0.1`
+```
+
+Use `tguser version` to answer environment questions without asking the user — it reports whether
+credentials are set and whether a session file exists, so it distinguishes "not installed" from
+"installed but not signed in". Use `--version` when you need a parseable single line.
+
+The command reads only: it never creates `~/.config/tguser` and never touches the network, so it is
+safe to run before `login`.
 
 ## Authentication commands
 

@@ -28,7 +28,7 @@ You can pin a specific branch or tag:
 
 ```bash
 uv tool install git+https://github.com/yerza06/tguser-cli.git@dev      # branch
-uv tool install git+https://github.com/yerza06/tguser-cli.git@v0.1.0   # tag
+uv tool install git+https://github.com/yerza06/tguser-cli.git@v1.0.1   # tag
 ```
 
 After that the command is available simply as `tguser` — no `uv run`, no dependency on the
@@ -36,7 +36,7 @@ repository directory:
 
 ```bash
 cd ~/any/directory
-tguser --version         # tguser 0.1.0
+tguser --version         # tguser 1.0.1
 ```
 
 ### What `uv tool install` does
@@ -62,13 +62,35 @@ So if you already signed in via `uv run tguser login`, you do not need to sign i
 
 ```bash
 which tguser             # /home/<user>/.local/bin/tguser
-tguser --version         # tguser 0.1.0
+tguser --version         # tguser 1.0.1
+tguser version           # version + environment (see below)
 tguser --help            # tree of all commands
 uv tool list             # list every tool installed through uv
 ```
 
 If the `--help` output lists commands like `login`, `chat`, `send`, `sendphoto`, etc., the
 installation was successful.
+
+`tguser version` is the fuller check — besides the version it shows where the configuration lives
+and whether an account is already signed in, which is the quickest way to describe your setup in a
+bug report:
+
+```console
+$ tguser version
+╭──────────────────────────────── Version info ────────────────────────────────╮
+│     Version:  1.0.1                                                          │
+│      Python:  3.13.11                                                        │
+│    Kurigram:  2.2.23                                                         │
+│      Config:  /home/user/.config/tguser                                      │
+│     Session:  present                                                        │
+│ Credentials:  set                                                            │
+│    Language:  en                                                             │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
+
+`Session: missing` or `Credentials: not set` means the account is not signed in yet — see
+[02. Authentication](02-authentication.md). The command reads only; it never creates the
+configuration directory.
 
 > If the shell answers `tguser: command not found` after installing, `~/.local/bin` is not on your
 > `PATH`. Run `uv tool update-shell` and restart the terminal (see

@@ -33,6 +33,16 @@ def info(message: str) -> None:
     console.print(message)
 
 
+def info_panel(rows: list[tuple[str, str]], title: str) -> None:
+    """Print a key/value panel from (label, value) pairs (used by ``tguser version``)."""
+    grid = Table.grid(padding=(0, 2))
+    grid.add_column(style="bold cyan", justify="right")
+    grid.add_column()
+    for label, value in rows:
+        grid.add_row(label, value)
+    console.print(Panel(grid, title=f"[bold green]{title}", border_style="green"))
+
+
 def chat_table(rows: list[tuple[str, str, str, str]]) -> Table:
     """Build the saved-chats table from (name, chat_id, title, created) tuples."""
     table = Table(title=t("console.chats_title"), header_style="bold cyan")

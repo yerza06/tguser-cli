@@ -71,6 +71,7 @@ then sign in:
 tguser login            # asks for api_id/api_hash and phone number (if unset), and the code
 tguser whoami           # show the current account
 tguser logout           # sign out and delete the session
+tguser version          # version, config path and whether a session exists
 ```
 
 Credentials are stored in `~/.config/tguser/.env`, the session in `~/.config/tguser/tguser.session`,
