@@ -25,7 +25,8 @@ tguser login
 The command will prompt you, in order, for:
 
 - `api_id` and `api_hash` — if they are not set yet (they will be saved to `~/.config/tguser/.env`);
-- your phone number in `+1…` format;
+- your phone number in `+1…` format — if `--phone` or `TGUSER_PHONE_NUMBER` is not set
+  (after a successful sign-in it is saved to `~/.config/tguser/.env` as well);
 - the confirmation code from Telegram;
 - your two-factor authentication password — **only if it is enabled**.
 
@@ -43,7 +44,16 @@ tguser login --api-id 1234567 --api-hash 0123456789abcdef0123456789abcdef --phon
 |------|-------------|
 | `--api-id` | api_id from my.telegram.org |
 | `--api-hash` | api_hash from my.telegram.org |
-| `--phone` | Phone number |
+| `--phone` | Phone number (falls back to `TGUSER_PHONE_NUMBER`) |
+
+The same values can come from the environment instead of flags:
+
+```bash
+export TGUSER_API_ID=1234567
+export TGUSER_API_HASH=0123456789abcdef0123456789abcdef
+export TGUSER_PHONE_NUMBER=+15551234567
+tguser login
+```
 
 The confirmation code and 2FA password are still requested interactively.
 

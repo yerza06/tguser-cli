@@ -115,7 +115,10 @@ MESSAGES: dict[str, dict[str, str]] = {
         "en": "api_hash from my.telegram.org",
         "ru": "api_hash с my.telegram.org",
     },
-    "auth.opt_phone": {"en": "Phone number", "ru": "Номер телефона"},
+    "auth.opt_phone": {
+        "en": "Phone number (default: $TGUSER_PHONE_NUMBER)",
+        "ru": "Номер телефона (по умолчанию: $TGUSER_PHONE_NUMBER)",
+    },
     "auth.get_credentials": {
         "en": "Get api_id/api_hash at [link]https://my.telegram.org[/link] (API development tools).",
         "ru": "Получите api_id/api_hash на [link]https://my.telegram.org[/link] (API development tools).",
