@@ -301,7 +301,7 @@ sdist = { url = "https://files.pythonhosted.org/packages/33/59/7cf5ced989e3139a7
 
 [[package]]
 name = "tguser"
-version = "0.1.0"
+version = "1.0.1"
 source = { editable = "." }
 dependencies = [
     { name = "aiosqlite" },

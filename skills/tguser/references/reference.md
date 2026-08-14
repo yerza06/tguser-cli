@@ -6,6 +6,7 @@ aren't enough — for full flag tables, parsing rules, configuration, or trouble
 ## Table of contents
 
 - [Global options](#global-options)
+- [Version & environment](#version--environment)
 - [Authentication commands](#authentication-commands)
 - [Configuration & file locations](#configuration--file-locations)
 - [Separate profiles](#separate-profiles)
@@ -25,6 +26,20 @@ aren't enough — for full flag tables, parsing rules, configuration, or trouble
 | `--show-completion` | Print the completion script |
 | `--help` | Help for any command |
 
+## Version & environment
+
+```bash
+tguser version      # panel: version, Python, Kurigram, config path, session, credentials, language
+tguser --version    # single line: `tguser 1.0.1`
+```
+
+Use `tguser version` to answer environment questions without asking the user — it reports whether
+credentials are set and whether a session file exists, so it distinguishes "not installed" from
+"installed but not signed in". Use `--version` when you need a parseable single line.
+
+The command reads only: it never creates `~/.config/tguser` and never touches the network, so it is
+safe to run before `login`.
+
 ## Authentication commands
 
 ```bash
@@ -34,16 +49,18 @@ tguser logout       # end the session and delete the local session file
 ```
 
 `login` prompts, in order, for: `api_id`/`api_hash` (only if not set yet — saved to
-`~/.config/tguser/.env`), phone number in `+1…` format, the SMS confirmation code, and the 2FA
-password **only if enabled**. On success it prints a panel with name, username, and id.
+`~/.config/tguser/.env`), phone number in `+1…` format (only if not set — also saved to
+`.env` after a successful sign-in), the SMS confirmation code, and the 2FA password
+**only if enabled**. On success it prints a panel with name, username, and id.
 
-You can pre-fill some values as flags (the code and 2FA password are still asked interactively):
+You can pre-fill some values as flags or environment variables (the code and 2FA password are
+still asked interactively):
 
-| Flag | Description |
-|------|-------------|
-| `--api-id` | api_id from my.telegram.org |
-| `--api-hash` | api_hash from my.telegram.org |
-| `--phone` | Phone number |
+| Flag | Environment variable | Description |
+|------|----------------------|-------------|
+| `--api-id` | `TGUSER_API_ID` | api_id from my.telegram.org |
+| `--api-hash` | `TGUSER_API_HASH` | api_hash from my.telegram.org |
+| `--phone` | `TGUSER_PHONE_NUMBER` | Phone number |
 
 Get `api_id`/`api_hash` at <https://my.telegram.org> → **API development tools**. These are
 secrets — never commit or publish them.
@@ -62,6 +79,7 @@ variables take precedence over the `~/.config/tguser/.env` file.
 |----------|---------|-------------|
 | `TGUSER_API_ID` | — | api_id from my.telegram.org |
 | `TGUSER_API_HASH` | — | api_hash from my.telegram.org |
+| `TGUSER_PHONE_NUMBER` | — | Phone number for `login` (asked interactively if unset) |
 | `TGUSER_CONFIG_DIR` | `~/.config/tguser` | Directory for session, database, and `.env` |
 | `TGUSER_SESSION_NAME` | `tguser` | Session name (file `<name>.session`) |
 | `TGUSER_LANG` | `en` | Output language: `en` or `ru`; unknown values fall back to `en` |

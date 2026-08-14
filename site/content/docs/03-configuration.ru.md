@@ -12,6 +12,7 @@ weight: 3
 |------------|--------------|----------|
 | `TGUSER_API_ID` | — | api_id с my.telegram.org |
 | `TGUSER_API_HASH` | — | api_hash с my.telegram.org |
+| `TGUSER_PHONE_NUMBER` | — | Номер телефона для `login` (если не задан — спросит интерактивно) |
 | `TGUSER_CONFIG_DIR` | `~/.config/tguser` | Каталог для сессии, БД и `.env` |
 | `TGUSER_SESSION_NAME` | `tguser` | Имя сессии (имя файла `<name>.session`) |
 | `TGUSER_LANG` | `en` | Язык вывода CLI: `en` или `ru` |
@@ -40,6 +41,7 @@ tguser --help          # справка на русском
 ```dotenv
 TGUSER_API_ID=1234567
 TGUSER_API_HASH=0123456789abcdef0123456789abcdef
+# TGUSER_PHONE_NUMBER=+79991234567
 # TGUSER_CONFIG_DIR=~/.config/tguser
 # TGUSER_SESSION_NAME=tguser
 ```
@@ -50,7 +52,7 @@ TGUSER_API_HASH=0123456789abcdef0123456789abcdef
 
 | Файл | Назначение |
 |------|------------|
-| `.env` | api_id/api_hash (создаётся командой `login`, права `0600`) |
+| `.env` | api_id/api_hash/номер телефона (создаётся командой `login`, права `0600`) |
 | `tguser.session` | Файл сессии Kurigram |
 | `tguser.db` | База SQLite с именованными чатами |
 

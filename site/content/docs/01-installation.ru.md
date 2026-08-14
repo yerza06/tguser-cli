@@ -28,14 +28,14 @@ uv tool install git+https://github.com/yerza06/tguser-cli.git
 
 ```bash
 uv tool install git+https://github.com/yerza06/tguser-cli.git@dev      # ветка
-uv tool install git+https://github.com/yerza06/tguser-cli.git@v0.1.0   # тег
+uv tool install git+https://github.com/yerza06/tguser-cli.git@v1.0.1   # тег
 ```
 
 После этого команда доступна просто как `tguser` — без `uv run` и без привязки к каталогу репозитория:
 
 ```bash
 cd ~/любая/директория
-tguser --version         # tguser 0.1.0
+tguser --version         # tguser 1.0.1
 ```
 
 ### Что делает `uv tool install`
@@ -61,13 +61,34 @@ tguser --version         # tguser 0.1.0
 
 ```bash
 which tguser             # /home/<user>/.local/bin/tguser
-tguser --version         # tguser 0.1.0
+tguser --version         # tguser 1.0.1
+tguser version           # версия + окружение (см. ниже)
 tguser --help            # дерево всех команд
 uv tool list             # показать все установленные через uv инструменты
 ```
 
 Если вывод `--help` показывает команды `login`, `chat`, `send`, `sendphoto` и т.д. — установка
 прошла успешно.
+
+`tguser version` — более полная проверка: кроме версии она показывает, где лежит конфигурация и
+выполнен ли вход в аккаунт. Это самый быстрый способ описать своё окружение в баг-репорте:
+
+```console
+$ tguser version
+╭──────────────────────────── Информация о версии ─────────────────────────────╮
+│         Версия:  1.0.1                                                       │
+│         Python:  3.13.11                                                     │
+│       Kurigram:  2.2.23                                                      │
+│   Конфигурация:  /home/user/.config/tguser                                   │
+│         Сессия:  есть                                                        │
+│ Учётные данные:  заданы                                                      │
+│           Язык:  ru                                                          │
+╰──────────────────────────────────────────────────────────────────────────────╯
+```
+
+`Сессия: нет` или `Учётные данные: не заданы` означают, что вход в аккаунт ещё не выполнен — см.
+[02. Авторизация](02-authentication.md). Команда только читает и никогда не создаёт каталог
+конфигурации.
 
 > Если после установки терминал отвечает `tguser: command not found`, значит `~/.local/bin` не
 > в `PATH`. Выполните `uv tool update-shell` и перезапустите терминал (см.

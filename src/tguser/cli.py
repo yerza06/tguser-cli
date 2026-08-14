@@ -5,8 +5,7 @@ from __future__ import annotations
 import typer
 from pyrogram.errors import RPCError
 
-from . import __version__
-from .commands import auth, chat, discovery, send
+from .commands import auth, chat, discovery, info, send
 from .console import error
 from .i18n import t
 
@@ -29,10 +28,13 @@ app.registered_commands.extend(discovery.app.registered_commands)
 # Sending commands at the top level (tguser send / sendphoto / …).
 app.registered_commands.extend(send.app.registered_commands)
 
+# Meta commands at the top level (tguser version).
+app.registered_commands.extend(info.app.registered_commands)
+
 
 def _version_callback(value: bool) -> None:
     if value:
-        typer.echo(f"tguser {__version__}")
+        typer.echo(info.version_line())
         raise typer.Exit()
 
 

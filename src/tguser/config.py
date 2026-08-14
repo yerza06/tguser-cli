@@ -25,6 +25,7 @@ class Settings(BaseSettings):
 
     api_id: int | None = None
     api_hash: str | None = None
+    phone_number: str | None = None
 
     config_dir: Path = Field(default=DEFAULT_CONFIG_DIR)
     session_name: str = "tguser"
@@ -62,8 +63,8 @@ def get_settings() -> Settings:
     return settings
 
 
-def save_credentials(settings: Settings, api_id: int, api_hash: str) -> None:
-    """Write api_id/api_hash to ``~/.config/tguser/.env`` (creates/updates the file)."""
+def _write_env(settings: Settings, values: dict[str, str]) -> None:
+    """Merge ``values`` into ``~/.config/tguser/.env`` (creates/updates the file)."""
     settings.ensure_config_dir()
     lines: dict[str, str] = {}
     if settings.env_file.exists():
@@ -74,13 +75,23 @@ def save_credentials(settings: Settings, api_id: int, api_hash: str) -> None:
             key, _, val = stripped.partition("=")
             lines[key.strip()] = val.strip()
 
-    lines["TGUSER_API_ID"] = str(api_id)
-    lines["TGUSER_API_HASH"] = api_hash
+    lines.update(values)
 
     content = "\n".join(f"{key}={value}" for key, value in lines.items()) + "\n"
     settings.env_file.write_text(content, encoding="utf-8")
     settings.env_file.chmod(0o600)
 
+
+def save_credentials(settings: Settings, api_id: int, api_hash: str) -> None:
+    """Write api_id/api_hash to ``~/.config/tguser/.env``."""
+    _write_env(settings, {"TGUSER_API_ID": str(api_id), "TGUSER_API_HASH": api_hash})
+
     # Update the in-memory settings object so we don't have to re-read.
     settings.api_id = api_id
     settings.api_hash = api_hash
+
+
+def save_phone_number(settings: Settings, phone_number: str) -> None:
+    """Write the phone number to ``~/.config/tguser/.env``."""
+    _write_env(settings, {"TGUSER_PHONE_NUMBER": phone_number})
+    settings.phone_number = phone_number

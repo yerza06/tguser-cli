@@ -14,7 +14,7 @@ license: MIT
 compatibility: Requires Python 3.13+, uv, and a one-time interactive Telegram login by a human.
 metadata:
   author: yerza06
-  version: "0.1.0"
+  version: "1.0.1"
 ---
 
 # tguser — send Telegram messages as a user
@@ -63,6 +63,11 @@ tguser login
 
 Signing in is a one-time human step. Afterwards the session at
 `~/.config/tguser/tguser.session` persists and every send works unattended.
+
+`tguser version` answers environment questions offline — version, Python, Kurigram, config path,
+and whether credentials and a session exist — without a network round-trip. Use it when `whoami`
+fails and you need to tell the user *what* is missing; use `tguser --version` for a parseable
+single line.
 
 ## 3. Pick a target
 

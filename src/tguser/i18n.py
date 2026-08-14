@@ -90,6 +90,24 @@ MESSAGES: dict[str, dict[str, str]] = {
         "en": "Show version and exit.",
         "ru": "Показать версию и выйти.",
     },
+    # --- info / version ---------------------------------------------------
+    "info.version_help": {
+        "en": "Show the version and environment information.",
+        "ru": "Показать версию и информацию об окружении.",
+    },
+    "info.title": {"en": "Version info", "ru": "Информация о версии"},
+    "info.label_version": {"en": "Version:", "ru": "Версия:"},
+    "info.label_python": {"en": "Python:", "ru": "Python:"},
+    "info.label_kurigram": {"en": "Kurigram:", "ru": "Kurigram:"},
+    "info.label_config": {"en": "Config:", "ru": "Конфигурация:"},
+    "info.label_session": {"en": "Session:", "ru": "Сессия:"},
+    "info.label_credentials": {"en": "Credentials:", "ru": "Учётные данные:"},
+    "info.label_language": {"en": "Language:", "ru": "Язык:"},
+    "info.session_present": {"en": "present", "ru": "есть"},
+    "info.session_missing": {"en": "missing", "ru": "нет"},
+    "info.credentials_set": {"en": "set", "ru": "заданы"},
+    "info.credentials_missing": {"en": "not set", "ru": "не заданы"},
+    "info.unknown": {"en": "unknown", "ru": "неизвестно"},
     # --- auth -------------------------------------------------------------
     "auth.help": {
         "en": "Telegram account authentication.",
@@ -115,7 +133,10 @@ MESSAGES: dict[str, dict[str, str]] = {
         "en": "api_hash from my.telegram.org",
         "ru": "api_hash с my.telegram.org",
     },
-    "auth.opt_phone": {"en": "Phone number", "ru": "Номер телефона"},
+    "auth.opt_phone": {
+        "en": "Phone number (default: $TGUSER_PHONE_NUMBER)",
+        "ru": "Номер телефона (по умолчанию: $TGUSER_PHONE_NUMBER)",
+    },
     "auth.get_credentials": {
         "en": "Get api_id/api_hash at [link]https://my.telegram.org[/link] (API development tools).",
         "ru": "Получите api_id/api_hash на [link]https://my.telegram.org[/link] (API development tools).",
